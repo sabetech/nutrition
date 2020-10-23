@@ -1,5 +1,37 @@
-import React from 'react';
+import React, {useCallback} from 'react';
+import './App.css';
+import './Nutrition.css';
+import Container from '@material-ui/core/Container';
+import HeaderBox from './Components/Header/headerBox';
 
-export default function Welcome(props) {
-    return <h1>Hello, {props.name}</h1>;
+import {useDropzone} from 'react-dropzone'
+
+export default function Home() {
+  const onDrop = useCallback((acceptedFiles) => {
+    acceptedFiles.forEach((file) => {
+      const reader = new FileReader()
+ 
+      reader.onabort = () => console.log('file reading was aborted')
+      reader.onerror = () => console.log('file reading has failed')
+      reader.onload = () => {
+      // Do whatever you want with the file contents
+        const binaryStr = reader.result
+        console.log(binaryStr)
+      }
+      reader.readAsArrayBuffer(file)
+    })
+    
+  }, [])
+  const {getRootProps, getInputProps} = useDropzone({onDrop})
+
+
+  return (
+    <Container >
+        <HeaderBox />
+        <div {...getRootProps()}>
+          <input {...getInputProps()} />
+          <p>Drag 'n' drop some files here, or click to select files</p>
+        </div>
+    </Container>
+  );
   }
