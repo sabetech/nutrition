@@ -16,16 +16,17 @@ import SummariesAliment from '../../Components/Aliments/SummariesAliment';
 
 export default function Home() {
 const [uploaded, setUploadState] = useState(false);
+const [aliment_portion, setAlimentPortion] = useState({});
 const [spreadsheetData, setSpreadsheetData] = useState({});
 const [spreadsheetCompo, setSpreadsheetCompo] = useState({});
 
 const classes = useStyles();
 
   useEffect(() => {
-    console.log(uploaded);
-    console.log(spreadsheetCompo);
-    console.log(spreadsheetData);
-  },[spreadsheetCompo, spreadsheetData, uploaded]);
+
+    //console.log(aliment_portion);
+    
+  },[uploaded, aliment_portion]);
 
   return (
     <Container >
@@ -37,6 +38,7 @@ const classes = useStyles();
             stateMutator={setUploadState} 
             spreadSheetMutator={setSpreadsheetData} 
             spreadSheetCompoMutator={setSpreadsheetCompo} 
+            setAlimentPortionMutator={setAlimentPortion}
           />
         }
 
@@ -50,8 +52,8 @@ const classes = useStyles();
                   </Typography>
 
                   <SummariesAliment 
-                      spreadsheetData={spreadsheetData}
-                      spreadsheetCompo={spreadsheetCompo}
+                      aliment_portion={aliment_portion}
+                      nutrientCompo={spreadsheetCompo}
                   />
 
                 </CardContent>        
@@ -63,16 +65,17 @@ const classes = useStyles();
               alignItems="flex-start"
               spacing={2}
             >
-           
             {
               spreadsheetData.aliments.map((item, index) => 
                 <Grid item xs={4} key={index}>
                     <AlimentCard  
-                              aliment={(item != null) ? item.aliment : ""} 
-                              sous_groupe={(item != null) ? item.sous_groupe_alimentaire : ""}
-                              groupe_alimentaire={(item != null) ? item.groupe_alimentaire : ""}
-                              portion={(item != null) ? item.portion : ""} 
-                              nutrientCompo={spreadsheetCompo}
+                          aliment={(item != null) ? item.aliment : ""} 
+                          sous_groupe={(item != null) ? item.sous_groupe_alimentaire : ""}
+                          groupe_alimentaire={(item != null) ? item.groupe_alimentaire : ""}
+                          portion={(item != null) ? item.portion : ""} 
+                          nutrientCompo={spreadsheetCompo}
+                          setAlimentPortion={setAlimentPortion}
+                          aliment_portion={aliment_portion}
                     />
                   
                 </Grid>

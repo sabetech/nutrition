@@ -17,7 +17,17 @@ import {
   import axios from 'axios';
 
 
-export default function AlimentCard({aliment, sous_groupe, groupe_alimentaire, portion, nutrientCompo}) {
+export default function AlimentCard(
+  {
+    aliment, 
+    sous_groupe, 
+    groupe_alimentaire, 
+    portion, 
+    nutrientCompo, 
+    setAlimentPortion,
+    aliment_portion
+  }) {
+
     const classes = useStyles();
     const [imageLoaded, setImageLoaded] = useState(false);
     const [imgsrc, setImgSrc] = useState("");
@@ -25,6 +35,7 @@ export default function AlimentCard({aliment, sous_groupe, groupe_alimentaire, p
 
     useEffect(() => {
         //try and get image of food from here ...
+
         axios({
             method: 'get',
             url: `http://127.0.0.1:8000/api/getFoodImage?aliment=${aliment}`,
@@ -34,6 +45,8 @@ export default function AlimentCard({aliment, sous_groupe, groupe_alimentaire, p
             setImageLoaded(true);
         })
         .catch((e) => { console.warn(e)});
+
+        
       
     }, [aliment]);
 
@@ -84,7 +97,10 @@ export default function AlimentCard({aliment, sous_groupe, groupe_alimentaire, p
                   variant="filled"
                   value={txtPortion}
                   onChange={(e) => {
+                    
                     setTxtPortion(Number.parseFloat(e.target.value));
+                    setAlimentPortion({...aliment_portion, [aliment]:Number.parseFloat(e.target.value)})
+
                     if (Number.parseFloat(e.target.value) < 0){
                       setTxtPortion(0);
                     }
