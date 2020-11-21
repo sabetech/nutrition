@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState} from 'react';
 import '../../App.css';
 import '../../Nutrition.css';
 import Container from '@material-ui/core/Container';
@@ -8,7 +8,7 @@ import UploadSpreadsheet from '../../Components/UploadSpreadsheet';
 import {
   Paper, 
   Grid,
-  Card,CardContent,Typography
+  Card,CardContent,Typography, LinearProgress
 } from '@material-ui/core/';
 import AlimentCard from '../../Components/Aliments/AlimentCard';
 import SummariesAliment from '../../Components/Aliments/SummariesAliment';
@@ -16,21 +16,17 @@ import SummariesAliment from '../../Components/Aliments/SummariesAliment';
 
 export default function Home() {
 const [uploaded, setUploadState] = useState(false);
+const [file_name, setFileName] = useState("No File Uploaded")
 const [aliment_portion, setAlimentPortion] = useState({});
 const [spreadsheetData, setSpreadsheetData] = useState({});
 const [spreadsheetCompo, setSpreadsheetCompo] = useState({});
+const [loading, setLoading] = useState(false);
 
 const classes = useStyles();
 
-  useEffect(() => {
-
-    //console.log(aliment_portion);
-    
-  },[uploaded, aliment_portion]);
-
   return (
     <Container >
-        <HeaderBox />
+        <HeaderBox file_name={file_name}/>
         
         {
         !uploaded &&
@@ -39,7 +35,14 @@ const classes = useStyles();
             spreadSheetMutator={setSpreadsheetData} 
             spreadSheetCompoMutator={setSpreadsheetCompo} 
             setAlimentPortionMutator={setAlimentPortion}
+            setLoadingMutator={setLoading}
+            setFileName={setFileName}
           />
+        }
+        
+        {
+          loading && 
+          <LinearProgress style={{marginTop: 10}}/>
         }
 
         {

@@ -9,7 +9,7 @@ import IconButton from '@material-ui/core/IconButton';
 import GridOn from '@material-ui/icons/GridOn';
 import axios from 'axios';
 
-export default function UploadSpreadsheet({stateMutator, spreadSheetMutator, spreadSheetCompoMutator, setAlimentPortionMutator}) {
+export default function UploadSpreadsheet({stateMutator, spreadSheetMutator, spreadSheetCompoMutator, setAlimentPortionMutator, setLoadingMutator, setFileName}) {
     const classes = useStyles();
 
     const selectFile = (event) => {
@@ -20,6 +20,8 @@ export default function UploadSpreadsheet({stateMutator, spreadSheetMutator, spr
     const upload = (file) => {
         let formData = new FormData();
         formData.append("file", file);
+        
+        setLoadingMutator(true);
 
         axios({
             method: 'post',
@@ -32,9 +34,10 @@ export default function UploadSpreadsheet({stateMutator, spreadSheetMutator, spr
         .then((response) => response.data)
         .then(responseJSON => {
             
+            setLoadingMutator(false);
             spreadSheetMutator(responseJSON.sheet1);
             spreadSheetCompoMutator(responseJSON.sheet2);
-            
+            setFileName(responseJSON.file_name);
             
             let myAlimentObj = {};
             responseJSON.sheet1.aliments.forEach((item) => {

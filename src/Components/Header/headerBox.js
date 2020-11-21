@@ -4,14 +4,14 @@ import Paper from '@material-ui/core/Paper';
 import { makeStyles } from '@material-ui/core/styles';
 import AppName from './appName';
 
-export default function HeaderBox(props) {
+export default function HeaderBox({file_name}) {
     const classes = useStyles();
     return (
         <Box component="span" className={classes.boxParentSize} >
             <Paper className={classes.root}>
                 <h1>Nutrition Application</h1>
             </Paper>
-            <AppName />
+            <AppName file_name={file_name}/>
         </Box>
         );
   }

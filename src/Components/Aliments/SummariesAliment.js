@@ -1,16 +1,71 @@
 import React, { useEffect,useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import {Typography, Chip} from '@material-ui/core/';
+import {Typography, Chip, Icon} from '@material-ui/core/';
 
 import RestaurantIcon from '@material-ui/icons/Restaurant';
-import DoneIcon from '@material-ui/icons/Done';
 
 export default function SummariesAliment({aliment_portion, nutrientCompo}){
     const classes = useStyles();
+    const styleList = [
+        {
+            icon: "done",
+            backgroundColor: "#70AB1A",
+            textColor: 'white'
+        }, {    
+            icon: "error_outline",
+            backgroundColor:"#D8AD26", 
+            textColor: 'white'
+        },
+        {
+            icon:"close",
+            backgroundColor: "#D14600",
+            textColor: 'white'
+        },
+        {
+            icon: "",
+            backgroundColor: "",
+            textColor: 'black'
+        }];
+
+    const nutrientConstraints = [
+        {
+            mid: 2250,
+            high: 3000
+        },
+        {
+            mid: 0,
+            high: 0
+        },
+        {
+            mid: 69,
+            high: 92
+        },
+        {
+            mid: 0,
+            high: 0
+        },
+        {
+            mid: 600,
+            high: 800
+        },
+        {
+            mid: 1875,
+            high: 2500
+        },
+        {
+            mid: 1500,
+            high: 2000
+        },
+        {
+            mid: 0,
+            high: 0
+        }
+    ]
     
-    return (<div>
+    return (<div className={classes.root}>
        {
            nutrientCompo.nutrient_headers.map((item, index) => {
+               let myStyleIndex = 0;
                if (!item) return;
                 const nutrientSum = Object.keys(aliment_portion).reduce((previousValue, currentValue) =>{
                     const nutrientValue = nutrientCompo.aliments_data_nutrient_ref
@@ -24,18 +79,22 @@ export default function SummariesAliment({aliment_portion, nutrientCompo}){
                     
                     return previousValue + prdt;
                 }, 0);
+
+                myStyleIndex = (nutrientSum >= nutrientConstraints[index].high) ? 2 : 
+                                        (nutrientSum > nutrientConstraints[index].mid) ? 1 : 0;
+
+                if (nutrientConstraints[index].high === 0) myStyleIndex = 3;
+                
                 return (
                     <Chip 
                         key={index}
-                        variant="outlined" 
-                        //className={classes.chipColor}
-                        color={'primary'}
-                        icon={<RestaurantIcon />} 
+                        style={{margin: "0.5%", backgroundColor: styleList[myStyleIndex].backgroundColor, color: styleList[myStyleIndex].textColor}}
+                        icon={<RestaurantIcon style={{color:styleList[myStyleIndex].textColor}} />} 
                         
                         label={<Typography className={classes.nutrientText}>
                             {item} <b>{nutrientSum.toFixed(2)}</b></Typography>}
                         onDelete={(e) => {}}
-                        deleteIcon={<DoneIcon />}
+                        deleteIcon={<Icon >{styleList[myStyleIndex].icon}</Icon>}
                     />)
            })
         }
@@ -43,10 +102,14 @@ export default function SummariesAliment({aliment_portion, nutrientCompo}){
         );
 } 
 
-const useStyles = makeStyles({
+const useStyles = makeStyles((theme) => ({
     root: {
-      width: "100%",
-      flex: 1
+        display: 'flex',
+        justifyContent: 'center',
+        flexWrap: 'wrap',
+        listStyle: 'none',
+        padding: theme.spacing(0.5),
+        margin: 0,
     },
     
     title: {
@@ -60,4 +123,5 @@ const useStyles = makeStyles({
         borderColor: 'green'
     }
     
-  });
+  })
+  );
