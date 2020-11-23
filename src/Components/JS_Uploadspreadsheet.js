@@ -15,11 +15,12 @@ export default function JsUploadSpreadsheet(
                                       spreadSheetCompoMutator, 
                                       setAlimentPortionMutator, 
                                       setLoadingMutator, 
-                                      setFileName}){
+                                      setFileName,
+                                      setSheet2Compo}){
 
     const classes = useStyles();
 
-    const selectFile = (event) => {
+    const selectFile = async (event) => {
         
         setLoadingMutator(true);
 
@@ -62,10 +63,7 @@ export default function JsUploadSpreadsheet(
               groupe_alimentaire: value[0],
               portion: value[3]
             });
-        })
-        
-        
-        console.log(sheet1Info);
+        });
 
         spreadSheetMutator(sheet1Info);
         let myAlimentObj = {};
@@ -84,8 +82,10 @@ export default function JsUploadSpreadsheet(
           
       /* Convert array to json*/
       const dataParse = XLSX.utils.sheet_to_json(ws, {header:1});
+
+      setSheet2Compo(dataParse);
+
       const sheet2Info = structureCompoSheet(dataParse);
-      
       spreadSheetCompoMutator(sheet2Info);
 
     }

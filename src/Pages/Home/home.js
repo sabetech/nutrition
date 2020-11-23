@@ -22,6 +22,7 @@ const [aliment_portion, setAlimentPortion] = useState({});
 const [spreadsheetData, setSpreadsheetData] = useState({});
 const [spreadsheetCompo, setSpreadsheetCompo] = useState({});
 const [loading, setLoading] = useState(false);
+const [sheet2Compo, setSheet2Compo] = useState([]);
 
 const classes = useStyles();
 
@@ -47,6 +48,7 @@ const classes = useStyles();
             setAlimentPortionMutator={setAlimentPortion}
             setLoadingMutator={setLoading}
             setFileName={setFileName}
+            setSheet2Compo={setSheet2Compo}
         />
 
 
@@ -91,6 +93,7 @@ const classes = useStyles();
                           nutrientCompo={spreadsheetCompo}
                           setAlimentPortion={setAlimentPortion}
                           aliment_portion={aliment_portion}
+                          sheet2Compo={sheet2Compo}
                     />
                   
                 </Grid>

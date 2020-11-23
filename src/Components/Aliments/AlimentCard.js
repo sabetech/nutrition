@@ -13,7 +13,8 @@ import {
     TextField,
     Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper
   } from '@material-ui/core/';
-  //import ElevatedHeaderCardDemo from './AlimentCard.js'
+  import Autocomplete from '@material-ui/lab/Autocomplete';
+  
   import axios from 'axios';
 
 
@@ -25,23 +26,45 @@ export default function AlimentCard(
     portion, 
     nutrientCompo, 
     setAlimentPortion,
-    aliment_portion
+    aliment_portion,
+    sheet2Compo
   }) {
 
     const classes = useStyles();
     const [imageLoaded, setImageLoaded] = useState(false);
     const [imgsrc, setImgSrc] = useState("");
     const [txtPortion, setTxtPortion] = useState(portion);
+    const [groupe_alimentaire_aliment, set_groupe_alimentaire_aliment] = useState({});
+
 
     useEffect(() => {
         //try and get image of food from here ...
+        console.log(sheet2Compo);
+        let bigObj = {};
+        sheet2Compo.map((item, index) => {
+            if (index == 0) return;
+            
+
+
+
+
+        });
+
+
 
         axios({
             method: 'get',
-            url: `http://127.0.0.1:8000/api/getFoodImage?aliment=${aliment}`,
+            url: `https://api.allorigins.win/get?url=${encodeURIComponent('https://www.google.fr/search?q='+aliment+'food+image&tbm=isch&bih=763&biw=1536&source=hp')}`,
         })
         .then((response) => {
-            setImgSrc(response.data);
+            
+            let imgSearch = response.data.contents;
+            let skipPos = imgSearch.indexOf("src");
+
+            let realImgPos = imgSearch.indexOf("src", (skipPos+1));
+            
+            setImgSrc(imgSearch.substring((realImgPos + 5), imgSearch.indexOf("&amp", realImgPos)));
+            
             setImageLoaded(true);
         })
         .catch((e) => { console.warn(e)});
@@ -107,7 +130,25 @@ export default function AlimentCard(
                   }}
                 />
 
-                <TableContainer component={Paper}>
+                <Autocomplete
+                  // {...defaultProps}
+                  // id="alim_grp_nom_fr"
+                  //onChange={}
+                  options={[]}
+                  debug
+                  renderInput={(params) => <TextField {...params} label="Groupe Alimentaire" margin="normal" />}
+                />
+
+                <Autocomplete
+                  // {...defaultProps}
+                  // id="alim_nom_fr"
+                  //onChange={}
+                  options={[]}
+                  debug
+                  renderInput={(params) => <TextField {...params} label="Aliment" margin="normal" />}
+                />
+
+                <TableContainer component={Paper} style={{display:'none'}}>
                   <Table className={classes.table} aria-label="simple table">
                     <TableHead>
                       <TableRow>
