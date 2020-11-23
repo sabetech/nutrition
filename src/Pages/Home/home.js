@@ -4,7 +4,8 @@ import '../../Nutrition.css';
 import Container from '@material-ui/core/Container';
 import HeaderBox from '../../Components/Header/headerBox';
 import { makeStyles } from '@material-ui/core/styles';
-import UploadSpreadsheet from '../../Components/UploadSpreadsheet';
+// import UploadSpreadsheet from '../../Components/UploadSpreadsheet';
+import JsUploadSpreadsheet from '../../Components/JS_Uploadspreadsheet';
 import {
   Paper, 
   Grid,
@@ -30,14 +31,25 @@ const classes = useStyles();
         
         {
         !uploaded &&
-        <UploadSpreadsheet 
+        // <UploadSpreadsheet 
+        //     stateMutator={setUploadState} 
+        //     spreadSheetMutator={setSpreadsheetData} 
+        //     spreadSheetCompoMutator={setSpreadsheetCompo} 
+        //     setAlimentPortionMutator={setAlimentPortion}
+        //     setLoadingMutator={setLoading}
+        //     setFileName={setFileName}
+        //   />
+        
+        <JsUploadSpreadsheet 
             stateMutator={setUploadState} 
             spreadSheetMutator={setSpreadsheetData} 
             spreadSheetCompoMutator={setSpreadsheetCompo} 
             setAlimentPortionMutator={setAlimentPortion}
             setLoadingMutator={setLoading}
             setFileName={setFileName}
-          />
+        />
+
+
         }
         
         {
