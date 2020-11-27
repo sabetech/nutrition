@@ -86,7 +86,7 @@ const classes = useStyles();
             >
             {
               spreadsheetData.aliments.map((item, index) => 
-                <Grid item xs={4} key={index}>
+                <Grid item xs key={index}>
                     <AlimentCard
                           id={index}  
                           aliment={(item != null) ? item.aliment : ""} 

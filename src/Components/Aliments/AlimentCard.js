@@ -85,16 +85,21 @@ export default function AlimentCard(
         //try and get image of food from here ...
         axios({
             method: 'get',
-            url: `https://api.allorigins.win/get?url=${encodeURIComponent('https://www.google.fr/search?q='+aliment+'food+image&tbm=isch&bih=763&biw=1536&source=hp')}`,
+            url: `https://api.allorigins.win/get?url=${encodeURIComponent('https://yandex.com/images/search?text='+aliment+'&isize=medium')}`,
         })
         .then((response) => {
             
             let imgSearch = response.data.contents;
-            let skipPos = imgSearch.indexOf("src");
+            let skip = imgSearch.indexOf("serp-item serp-item_type_search");
 
-            let realImgPos = imgSearch.indexOf("src", (skipPos+1));
+            let startPos = imgSearch.indexOf("https", skip);
+            let endPos = imgSearch.indexOf(".jpg", startPos);
             
-            setImgSrc(imgSearch.substring((realImgPos + 5), imgSearch.indexOf("&amp", realImgPos)));
+            let finalString = imgSearch.substring(startPos, endPos+4);
+
+            console.log(finalString);
+
+            setImgSrc(finalString);
             
             setImageLoaded(true);
         })
@@ -103,6 +108,8 @@ export default function AlimentCard(
     }, [aliment, selected_groupe_alimentaire]);
 
     //https://www.google.com/search?tbm=isch&source=hp&biw=1015&bih=763&q=Soupe aux légumes variés, préemballée à réchauffer
+
+    //https://yandex.com/images/search?text=Avocat%2C%20pulpe%2C%20cru&isize=medium
 
     return (
         <Card className={classes.card}>
@@ -215,8 +222,8 @@ export default function AlimentCard(
 
 const useStyles = makeStyles((theme) =>({
     card: {
-      width: 300,
-      margin: 20,
+      maxWidth: 300,
+      margin: 5,
     },
     media: {
       height: 0,
