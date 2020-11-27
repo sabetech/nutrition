@@ -17,13 +17,15 @@ import {
   
   import axios from 'axios';
 
-
 export default function AlimentCard(
   {
+    id,
     aliment, 
     sous_groupe, 
     groupe_alimentaire, 
     portion, 
+    spreadsheetData,
+    setSpreadsheetData,
     nutrientCompo, 
     setAlimentPortion,
     aliment_portion,
@@ -35,23 +37,52 @@ export default function AlimentCard(
     const [imgsrc, setImgSrc] = useState("");
     const [txtPortion, setTxtPortion] = useState(portion);
     const [groupe_alimentaire_aliment, set_groupe_alimentaire_aliment] = useState({});
+    const [selected_groupe_alimentaire, set_selected_groupe_alimentaire_aliment] = useState("");
 
+    const handleAlimentChange = (value) => {
+        
+        //get index ... 
+        //let alimentIndex;
 
-    useEffect(() => {
-        //try and get image of food from here ...
-        console.log(sheet2Compo);
-        let bigObj = {};
-        sheet2Compo.map((item, index) => {
-            if (index == 0) return;
-            
+        let sous_groupe_alim = nutrientCompo.aliments_data_nutrient_ref
+                          [nutrientCompo.aliments_data_nutrient_ref.findIndex
+                            (
+                              (element) => value === Object.keys(element)[0]
+                            )][value].alim_grp_nom_fr;
+        
+        let groupe_alim = nutrientCompo.aliments_data_nutrient_ref
+        [nutrientCompo.aliments_data_nutrient_ref.findIndex
+          (
+            (element) => value === Object.keys(element)[0]
+          )][value].alim_ssgrp_nom_fr;
 
-
-
-
+        spreadsheetData.aliments.splice(id, 1, {
+            aliment: value,
+            sous_groupe_alimentaire: sous_groupe_alim,
+            groupe_alimentaire: groupe_alim,
+            portion: 1
         });
 
+        setImageLoaded(false);
+        setSpreadsheetData({...spreadsheetData, aliments: spreadsheetData.aliments});
 
+    }
 
+    useEffect(() => {
+        
+        let groupe_aliments = {};
+        sheet2Compo.map((item, index) => {
+            if (index == 0) return;
+            if (groupe_aliments.hasOwnProperty(item[0])){
+              groupe_aliments[item[0]].push(item[2])
+            }else{
+              groupe_aliments[item[0]] = [];
+              groupe_aliments[item[0]].push(item[2])
+            }
+        });
+        set_groupe_alimentaire_aliment(groupe_aliments);
+
+        //try and get image of food from here ...
         axios({
             method: 'get',
             url: `https://api.allorigins.win/get?url=${encodeURIComponent('https://www.google.fr/search?q='+aliment+'food+image&tbm=isch&bih=763&biw=1536&source=hp')}`,
@@ -68,10 +99,8 @@ export default function AlimentCard(
             setImageLoaded(true);
         })
         .catch((e) => { console.warn(e)});
-
-        
       
-    }, [aliment]);
+    }, [aliment, selected_groupe_alimentaire]);
 
     //https://www.google.com/search?tbm=isch&source=hp&biw=1015&bih=763&q=Soupe aux légumes variés, préemballée à réchauffer
 
@@ -93,7 +122,6 @@ export default function AlimentCard(
               title={aliment}
             />) 
             : 
-            
             <CircularProgress />
              
             }
@@ -131,20 +159,18 @@ export default function AlimentCard(
                 />
 
                 <Autocomplete
-                  // {...defaultProps}
-                  // id="alim_grp_nom_fr"
-                  //onChange={}
-                  options={[]}
-                  debug
+                  onChange={(event, value) => {set_selected_groupe_alimentaire_aliment(value)}}
+                  blurOnSelect
+                  options={Object.keys(groupe_alimentaire_aliment).map((option) => option)}
+                  getOptionLabel={(option) => option}
                   renderInput={(params) => <TextField {...params} label="Groupe Alimentaire" margin="normal" />}
                 />
 
                 <Autocomplete
-                  // {...defaultProps}
-                  // id="alim_nom_fr"
-                  //onChange={}
-                  options={[]}
-                  debug
+                  onChange={ (event, value) => handleAlimentChange(value) }
+                  openOnFocus
+                  options={groupe_alimentaire_aliment[selected_groupe_alimentaire] || []}
+                  getOptionLabel={(option) => option}
                   renderInput={(params) => <TextField {...params} label="Aliment" margin="normal" />}
                 />
 

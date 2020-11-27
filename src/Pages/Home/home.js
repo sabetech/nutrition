@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import '../../App.css';
 import '../../Nutrition.css';
 import Container from '@material-ui/core/Container';
@@ -26,20 +26,22 @@ const [sheet2Compo, setSheet2Compo] = useState([]);
 
 const classes = useStyles();
 
+  useEffect(() => {
+      
+      if (typeof spreadsheetData.aliments == 'undefined') return;
+      console.log(spreadsheetData.aliments.length);
+
+      console.log(spreadsheetData);
+
+
+  }, [spreadsheetData])
+
   return (
     <Container >
         <HeaderBox file_name={file_name}/>
         
         {
         !uploaded &&
-        // <UploadSpreadsheet 
-        //     stateMutator={setUploadState} 
-        //     spreadSheetMutator={setSpreadsheetData} 
-        //     spreadSheetCompoMutator={setSpreadsheetCompo} 
-        //     setAlimentPortionMutator={setAlimentPortion}
-        //     setLoadingMutator={setLoading}
-        //     setFileName={setFileName}
-        //   />
         
         <JsUploadSpreadsheet 
             stateMutator={setUploadState} 
@@ -85,11 +87,14 @@ const classes = useStyles();
             {
               spreadsheetData.aliments.map((item, index) => 
                 <Grid item xs={4} key={index}>
-                    <AlimentCard  
+                    <AlimentCard
+                          id={index}  
                           aliment={(item != null) ? item.aliment : ""} 
                           sous_groupe={(item != null) ? item.sous_groupe_alimentaire : ""}
                           groupe_alimentaire={(item != null) ? item.groupe_alimentaire : ""}
                           portion={(item != null) ? item.portion : ""} 
+                          spreadsheetData={spreadsheetData}
+                          setSpreadsheetData={setSpreadsheetData} 
                           nutrientCompo={spreadsheetCompo}
                           setAlimentPortion={setAlimentPortion}
                           aliment_portion={aliment_portion}

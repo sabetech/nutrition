@@ -105,6 +105,8 @@ export default function JsUploadSpreadsheet(
           sheet2Info.aliments_data_nutrient_ref.push({
             [value[2]] : {
               alim_nom_fr: value[2],
+              alim_grp_nom_fr: value[0],
+              alim_ssgrp_nom_fr: value[1],
               les_nutrients: [
                 {
                   id: ++index,
