@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import { red } from '@material-ui/core/colors';
+import { blue } from '@material-ui/core/colors';
 import {
     Card, 
     CardHeader, 
@@ -29,28 +29,25 @@ export default function AlimentCard(
     nutrientCompo, 
     setAlimentPortion,
     aliment_portion,
-    sheet2Compo
+    aliment_options
   }) {
 
     const classes = useStyles();
     const [imageLoaded, setImageLoaded] = useState(false);
     const [imgsrc, setImgSrc] = useState("");
     const [txtPortion, setTxtPortion] = useState(portion);
-    const [groupe_alimentaire_aliment, set_groupe_alimentaire_aliment] = useState({});
-    const [selected_groupe_alimentaire, set_selected_groupe_alimentaire_aliment] = useState("");
+    const [aliment_compo_group_alimentaire, set_aliment_compo_groupe_alimentaire] = useState("");
+    
 
     const handleAlimentChange = (value) => {
         
-        //get index ... 
-        //let alimentIndex;
-
-        let sous_groupe_alim = nutrientCompo.aliments_data_nutrient_ref
+        let groupe_alim = nutrientCompo.aliments_data_nutrient_ref
                           [nutrientCompo.aliments_data_nutrient_ref.findIndex
                             (
                               (element) => value === Object.keys(element)[0]
                             )][value].alim_grp_nom_fr;
         
-        let groupe_alim = nutrientCompo.aliments_data_nutrient_ref
+        let sous_groupe_alim = nutrientCompo.aliments_data_nutrient_ref 
         [nutrientCompo.aliments_data_nutrient_ref.findIndex
           (
             (element) => value === Object.keys(element)[0]
@@ -70,19 +67,14 @@ export default function AlimentCard(
 
     useEffect(() => {
         
-        let groupe_aliments = {};
-        sheet2Compo.map((item, index) => {
-            if (index == 0) return;
-            if (groupe_aliments.hasOwnProperty(item[0])){
-              groupe_aliments[item[0]].push(item[2])
-            }else{
-              groupe_aliments[item[0]] = [];
-              groupe_aliments[item[0]].push(item[2])
-            }
-        });
-        set_groupe_alimentaire_aliment(groupe_aliments);
+      let groupe_alim = nutrientCompo.aliments_data_nutrient_ref
+                          [nutrientCompo.aliments_data_nutrient_ref.findIndex
+                            (
+                              (element) => aliment === Object.keys(element)[0]
+                            )][aliment].alim_grp_nom_fr;
 
-        //try and get image of food from here ...
+      set_aliment_compo_groupe_alimentaire(groupe_alim);        
+        
         axios({
             method: 'get',
             url: `https://api.allorigins.win/get?url=${encodeURIComponent('https://yandex.com/images/search?text='+aliment+'&isize=medium')}`,
@@ -90,22 +82,21 @@ export default function AlimentCard(
         .then((response) => {
             
             let imgSearch = response.data.contents;
-            let skip = imgSearch.indexOf("serp-item serp-item_type_search");
+
+            let skip = imgSearch.indexOf("\"freshness\":\"normal\",\"preview\"");
 
             let startPos = imgSearch.indexOf("https", skip);
-            let endPos = imgSearch.indexOf(".jpg", startPos);
+            let endPos = imgSearch.indexOf("fileSizeInBytes", startPos);
             
-            let finalString = imgSearch.substring(startPos, endPos+4);
-
-            console.log(finalString);
+            let finalString = imgSearch.substring(startPos, (endPos-3));
 
             setImgSrc(finalString);
-            
             setImageLoaded(true);
         })
         .catch((e) => { console.warn(e)});
+
       
-    }, [aliment, selected_groupe_alimentaire]);
+    }, [aliment, aliment_options]);
 
     //https://www.google.com/search?tbm=isch&source=hp&biw=1015&bih=763&q=Soupe aux légumes variés, préemballée à réchauffer
 
@@ -119,7 +110,7 @@ export default function AlimentCard(
                   {aliment != null ? aliment[0]: ""}
                 </Avatar>
               }
-              title={aliment}
+              title={<Typography variant="h5" color="primary" component="p">{aliment}</Typography>}
               subheader={`Sous-Groupe Alimentaire ${sous_groupe}`}
             />
             {imageLoaded ? (
@@ -133,7 +124,7 @@ export default function AlimentCard(
              
             }
             <CardContent>
-                <Typography variant="body2" color="textSecondary" component="p">
+                <Typography variant="subtitle1" color="primary" component="p">
                 Groupe Alimentaire: {groupe_alimentaire}
                 </Typography>
             </CardContent>
@@ -166,19 +157,10 @@ export default function AlimentCard(
                 />
 
                 <Autocomplete
-                  onChange={(event, value) => {set_selected_groupe_alimentaire_aliment(value)}}
-                  blurOnSelect
-                  options={Object.keys(groupe_alimentaire_aliment).map((option) => option)}
-                  getOptionLabel={(option) => option}
-                  renderInput={(params) => <TextField {...params} label="Groupe Alimentaire" margin="normal" />}
-                />
-
-                <Autocomplete
                   onChange={ (event, value) => handleAlimentChange(value) }
-                  openOnFocus
-                  options={groupe_alimentaire_aliment[selected_groupe_alimentaire] || []}
+                  options={aliment_options[aliment_compo_group_alimentaire] || []}
                   getOptionLabel={(option) => option}
-                  renderInput={(params) => <TextField {...params} label="Aliment" margin="normal" />}
+                  renderInput={(params) => <TextField {...params} label="Change Aliment" margin="normal" />}
                 />
 
                 <TableContainer component={Paper} style={{display:'none'}}>
@@ -222,8 +204,11 @@ export default function AlimentCard(
 
 const useStyles = makeStyles((theme) =>({
     card: {
-      maxWidth: 300,
-      margin: 5,
+      width: window.innerWidth - 30,
+      margin: 1,
+      marginTop: 10,
+      marginBottom: 30,
+      //background: "linear-gradient(#654ea3, #eaafc8)"
     },
     media: {
       height: 0,
@@ -240,7 +225,7 @@ const useStyles = makeStyles((theme) =>({
       transform: 'rotate(180deg)',
     },
     avatar: {
-      backgroundColor: red[500],
+      backgroundColor: blue[500],
     },
     table: {
       width : 250

@@ -16,7 +16,7 @@ export default function JsUploadSpreadsheet(
                                       setAlimentPortionMutator, 
                                       setLoadingMutator, 
                                       setFileName,
-                                      setSheet2Compo}){
+                                      setAlimentOptions}){
 
     const classes = useStyles();
 
@@ -83,11 +83,23 @@ export default function JsUploadSpreadsheet(
       /* Convert array to json*/
       const dataParse = XLSX.utils.sheet_to_json(ws, {header:1});
 
-      setSheet2Compo(dataParse);
-
       const sheet2Info = structureCompoSheet(dataParse);
       spreadSheetCompoMutator(sheet2Info);
 
+      let groupe_aliments = {};
+
+      dataParse.map((item, index) => {
+          if (index == 0) return;
+            if (groupe_aliments.hasOwnProperty(item[0])){
+              groupe_aliments[item[0]].push(item[2])
+            }else{
+              groupe_aliments[item[0]] = [];
+              groupe_aliments[item[0]].push(item[2])
+            }
+        });
+
+        setAlimentOptions(groupe_aliments);
+        
     }
 
     const structureCompoSheet = (jsonSpreadsheetCompo) => {

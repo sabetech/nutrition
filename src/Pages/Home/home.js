@@ -22,19 +22,17 @@ const [aliment_portion, setAlimentPortion] = useState({});
 const [spreadsheetData, setSpreadsheetData] = useState({});
 const [spreadsheetCompo, setSpreadsheetCompo] = useState({});
 const [loading, setLoading] = useState(false);
-const [sheet2Compo, setSheet2Compo] = useState([]);
+const [aliment_options, setAlimentOptions] = useState([]);
 
 const classes = useStyles();
 
   useEffect(() => {
       
       if (typeof spreadsheetData.aliments == 'undefined') return;
-      console.log(spreadsheetData.aliments.length);
 
-      console.log(spreadsheetData);
+      console.log(aliment_options);
 
-
-  }, [spreadsheetData])
+  }, [spreadsheetData, aliment_options]);
 
   return (
     <Container >
@@ -50,7 +48,7 @@ const classes = useStyles();
             setAlimentPortionMutator={setAlimentPortion}
             setLoadingMutator={setLoading}
             setFileName={setFileName}
-            setSheet2Compo={setSheet2Compo}
+            setAlimentOptions={setAlimentOptions}
         />
 
 
@@ -86,7 +84,7 @@ const classes = useStyles();
             >
             {
               spreadsheetData.aliments.map((item, index) => 
-                <Grid item xs key={index}>
+                <Grid item key={index}>
                     <AlimentCard
                           id={index}  
                           aliment={(item != null) ? item.aliment : ""} 
@@ -98,7 +96,7 @@ const classes = useStyles();
                           nutrientCompo={spreadsheetCompo}
                           setAlimentPortion={setAlimentPortion}
                           aliment_portion={aliment_portion}
-                          sheet2Compo={sheet2Compo}
+                          aliment_options={aliment_options}  
                     />
                   
                 </Grid>
