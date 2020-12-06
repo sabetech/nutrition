@@ -30,7 +30,15 @@ const classes = useStyles();
       
       if (typeof spreadsheetData.aliments == 'undefined') return;
 
-      console.log(aliment_options);
+      let myAlimentObj = {};
+      spreadsheetData.aliments.forEach((item) => {
+          myAlimentObj[item.aliment] = item.portion;
+      });
+      
+      setAlimentPortion(
+        myAlimentObj
+      );
+
 
   }, [spreadsheetData, aliment_options]);
 

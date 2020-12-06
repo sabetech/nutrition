@@ -57,7 +57,7 @@ export default function AlimentCard(
             aliment: value,
             sous_groupe_alimentaire: sous_groupe_alim,
             groupe_alimentaire: groupe_alim,
-            portion: 1
+            portion: txtPortion
         });
 
         setImageLoaded(false);
@@ -173,7 +173,6 @@ export default function AlimentCard(
                     </TableHead>
                     <TableBody>
                     {
-                      
                         nutrientCompo.aliments_data_nutrient_ref
                           [nutrientCompo.aliments_data_nutrient_ref.findIndex
                             (
