@@ -27,18 +27,18 @@ export default function JsUploadSpreadsheet(
         var files = event.target.files, f = files[0];
         var reader = new FileReader();
         
-        reader.onload = function (event) {
+        reader.onload = async function (event) {
             var data = event.target.result;
             let readedData = XLSX.read(data, {type: 'binary'});
-            readSheet1(readedData);
-            readSheet2(readedData);
+            await readSheet1(readedData);
+            await readSheet2(readedData);
 
-            stateMutator(true) //change the state of the upload
-            setLoadingMutator(false);
+            await stateMutator(true) //change the state of the upload
+            await setLoadingMutator(false);
         };
 
         setFileName(f.name);
-        reader.readAsBinaryString(f);
+        await reader.readAsBinaryString(f);
 
     };
 
@@ -160,6 +160,12 @@ export default function JsUploadSpreadsheet(
                   nutrient: sheet2Info.nutrient_headers[7],
                   value: value[10].toString().replace(',', '.')
                 },
+                {
+                  id: ++index,
+                  nutrient: sheet2Info.nutrient_headers[1] +" "+ sheet2Info.nutrient_headers[3],
+                  value: parseFloat(value[4].toString().replace(',', '.')) 
+                        + parseFloat(value[6].toString().replace(',', '.'))
+                },
               ]
             }
           })
@@ -170,6 +176,7 @@ export default function JsUploadSpreadsheet(
     }
 
     const getNutrientHeaders = (row) => {
+      row.push("Eau + Alcool");
       return row.slice(3);
     }
 

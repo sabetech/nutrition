@@ -133,7 +133,7 @@ export default function AlimentCard(
             </CardActions>
             
             <CardContent>
-                <Typography paragraph>Les nutriments</Typography>
+                <Typography paragraph>Les Aliments</Typography>
                 <TextField
                   required
                   InputLabelProps={{

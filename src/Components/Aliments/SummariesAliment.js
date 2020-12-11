@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { Progress } from 'semantic-ui-react'
 import { Chip, Icon, Typography } from '@material-ui/core';
@@ -66,7 +66,12 @@ export default function SummariesAliment({aliment_portion, nutrientCompo}){
         {
             mid: 0,
             high: 0
+        },
+        {
+            mid: 0,
+            high: 1200
         }
+
     ]
     
     return (<div className={classes.root}>
@@ -97,13 +102,14 @@ export default function SummariesAliment({aliment_portion, nutrientCompo}){
                 progressBarColorIndex = (nutrientPercent >= 75) ? 2 :
                                             (nutrientPercent >= 50) ? 1 : 0;
 
+                
                 return (
-                    <div key={index} style={{marginBottom: 20, width:"90%", paddingBottom: 5}}>
+                    <div key={index} style={{marginBottom: 20, width:"95%", paddingTop: 10}}>
                     {(EAU != item) && (ALCOOL != item) && (GLUCIDES != item)  ?
                 (
                 <Progress key={index} className={progressClassNames[progressBarColorIndex]} style={{margin: "0.5%"}} percent={nutrientPercent} progress>
-                    <Typography className={classes.nutrientText}>
-                        {item}
+                    <Typography className={classes.nutrientText} noWrap={true} >
+                        {item} - <b>{nutrientSum.toFixed(2)}</b>
                     </Typography>
                 </Progress>
                 ) :
