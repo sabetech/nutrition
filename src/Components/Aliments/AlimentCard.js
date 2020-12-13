@@ -17,6 +17,8 @@ import {
   
   import axios from 'axios';
 
+  
+
 export default function AlimentCard(
   {
     id,
@@ -146,12 +148,14 @@ export default function AlimentCard(
                   variant="filled"
                   value={txtPortion}
                   onChange={(e) => {
-                    
-                    setTxtPortion(Number.parseFloat(e.target.value));
-                    setAlimentPortion({...aliment_portion, [aliment]:Number.parseFloat(e.target.value)})
-
-                    if (Number.parseFloat(e.target.value) < 0){
-                      setTxtPortion(0);
+                    if (e.target.value !== ""){
+                      setTxtPortion(Number.parseFloat(e.target.value));
+                      setAlimentPortion({...aliment_portion, [aliment]:Number.parseFloat(e.target.value)})
+                      if (Number.parseFloat(e.target.value) < 0){
+                        setTxtPortion(0);
+                      }  
+                    }else{
+                      setTxtPortion(e.target.value);
                     }
                   }}
                 />
@@ -206,7 +210,7 @@ const useStyles = makeStyles((theme) =>({
       width: window.innerWidth - 30,
       margin: 1,
       marginTop: 10,
-      marginBottom: 30,
+      marginBottom: 50,
       //background: "linear-gradient(#654ea3, #eaafc8)"
     },
     media: {

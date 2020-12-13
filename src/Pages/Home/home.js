@@ -1,18 +1,17 @@
 import React, {useEffect, useState} from 'react';
 import '../../App.css';
 import '../../Nutrition.css';
-import Container from '@material-ui/core/Container';
+import {Container, Box} from '@material-ui/core/';
 import HeaderBox from '../../Components/Header/headerBox';
 import { makeStyles } from '@material-ui/core/styles';
-// import UploadSpreadsheet from '../../Components/UploadSpreadsheet';
 import JsUploadSpreadsheet from '../../Components/JS_Uploadspreadsheet';
 import {
   Paper, 
-  Grid,
   Card,CardContent,Typography, LinearProgress
 } from '@material-ui/core/';
 import AlimentCard from '../../Components/Aliments/AlimentCard';
 import SummariesAliment from '../../Components/Aliments/SummariesAliment';
+import Carousel from 'react-elastic-carousel'
 
 
 export default function Home() {
@@ -84,17 +83,12 @@ const classes = useStyles();
                 </CardContent>        
               </Card>
 
-            <Grid
-              container
-              justify="space-evenly"
-              alignItems="flex-start"
-              spacing={2}
-            >
-            {
+              <Carousel itemsToShow={1}>
+              {
               spreadsheetData.aliments.map((item, index) => 
-                <Grid item key={index}>
                     <AlimentCard
                           id={index}  
+                          key={index}
                           aliment={(item != null) ? item.aliment : ""} 
                           sous_groupe={(item != null) ? item.sous_groupe_alimentaire : ""}
                           groupe_alimentaire={(item != null) ? item.groupe_alimentaire : ""}
@@ -106,12 +100,12 @@ const classes = useStyles();
                           aliment_portion={aliment_portion}
                           aliment_options={aliment_options}  
                     />
-                  
-                </Grid>
-            )
-
-            }
-            </Grid>
+                )
+              }
+             </Carousel>
+            <Box component="span" m={1}>
+              
+            </Box>
           </Paper>
         }
     

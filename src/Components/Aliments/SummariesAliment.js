@@ -1,11 +1,43 @@
-import React, {useState} from 'react';
+import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import { Progress } from 'semantic-ui-react'
-import { Chip, Icon, Typography } from '@material-ui/core';
+import { Chip, Icon, Typography, Slider, withStyles } from '@material-ui/core';
 import RestaurantIcon from '@material-ui/icons/Restaurant';
 
 
+
+
 export default function SummariesAliment({aliment_portion, nutrientCompo}){
+    const PrettoSlider = withStyles(theme => ({
+        root: {
+          height: 8,
+        },
+        disabled: {
+            color: theme.palette.primary.main
+        },
+        thumb: {
+          height: 24,
+          width: 24,
+          backgroundColor: '#fff',
+          border: '2px solid currentColor',
+          marginTop: -8,
+          marginLeft: -12,
+          '&:focus, &:hover, &$active': {
+            boxShadow: 'inherit',
+          },
+        },
+        active: {},
+        valueLabel: {
+          left: 'calc(-50% + 4px)',
+        },
+        track: {
+          height: 8,
+          borderRadius: 4,
+        },
+        rail: {
+          height: 8,
+          borderRadius: 4,
+        },
+      }))(Slider);
     const classes = useStyles();
     const EAU = "Eau (g/100g)";
     const ALCOOL = "Alcool (g/100g)";
@@ -32,7 +64,13 @@ export default function SummariesAliment({aliment_portion, nutrientCompo}){
             textColor: 'black'
         }];
 
-    const progressClassNames = ["ui green progress", "ui yellow progress", "ui red progress"]
+    const progressClassNames = [{
+        color: '#72DC00',
+    },{
+        color: "#D29D23"
+    },{
+        color: "#A93226"
+    }]
 
     const nutrientConstraints = [
         {
@@ -97,7 +135,7 @@ export default function SummariesAliment({aliment_portion, nutrientCompo}){
 
                 if (nutrientConstraints[index].high === 0) myStyleIndex = 3;
 
-                let nutrientPercent = ((nutrientSum/nutrientConstraints[index].high) * 100).toFixed(0)
+                let nutrientPercent = ((nutrientSum/nutrientConstraints[index].high) * 100).toFixed(0);
                 
                 progressBarColorIndex = (nutrientPercent >= 75) ? 2 :
                                             (nutrientPercent >= 50) ? 1 : 0;
@@ -107,11 +145,17 @@ export default function SummariesAliment({aliment_portion, nutrientCompo}){
                     <div key={index} style={{marginBottom: 20, width:"95%", paddingTop: 10}}>
                     {(EAU != item) && (ALCOOL != item) && (GLUCIDES != item)  ?
                 (
-                <Progress key={index} className={progressClassNames[progressBarColorIndex]} style={{margin: "0.5%"}} percent={nutrientPercent} progress>
-                    <Typography className={classes.nutrientText} noWrap={true} >
-                        {item} - <b>{nutrientSum.toFixed(2)}</b>
-                    </Typography>
-                </Progress>
+                <div>
+                    <PrettoSlider 
+                        //valueLabelDisplay="auto" 
+                        aria-label="pretto slider" 
+                        value={nutrientPercent} 
+                        valueLabelDisplay="on"
+                        step={1}
+                        style={{color:progressClassNames[progressBarColorIndex].color}}
+                        />
+                    <Typography gutterBottom>{item}</Typography>
+                </div>
                 ) :
                 (
                     <Chip 
