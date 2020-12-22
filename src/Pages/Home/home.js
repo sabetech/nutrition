@@ -48,16 +48,20 @@ const classes = useStyles();
         {
         !uploaded &&
         
-        <JsUploadSpreadsheet 
-            stateMutator={setUploadState} 
-            spreadSheetMutator={setSpreadsheetData} 
-            spreadSheetCompoMutator={setSpreadsheetCompo} 
-            setAlimentPortionMutator={setAlimentPortion}
-            setLoadingMutator={setLoading}
-            setFileName={setFileName}
-            setAlimentOptions={setAlimentOptions}
-        />
-
+        <>
+          <JsUploadSpreadsheet 
+              stateMutator={setUploadState} 
+              spreadSheetMutator={setSpreadsheetData} 
+              spreadSheetCompoMutator={setSpreadsheetCompo} 
+              setAlimentPortionMutator={setAlimentPortion}
+              setLoadingMutator={setLoading}
+              setFileName={setFileName}
+              setAlimentOptions={setAlimentOptions}
+          />
+          <div style={{marginTop:20}}>
+            <a href="PHASE 2_Démo -12 sep.xlsx" >Download Sample Spreadsheet Here</a>
+          </div>
+        </>
 
         }
         
