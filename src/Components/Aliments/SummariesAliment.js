@@ -154,7 +154,7 @@ export default function SummariesAliment({aliment_portion, nutrientCompo}){
                         step={1}
                         style={{color:progressClassNames[progressBarColorIndex].color}}
                         />
-                    <Typography gutterBottom>{item} {item.match(/\((.*?)\)/)[1]}</Typography>
+                    <Typography gutterBottom>{item}</Typography>
                 </div>
                 ) :
                 (
@@ -164,7 +164,7 @@ export default function SummariesAliment({aliment_portion, nutrientCompo}){
                         icon={<RestaurantIcon style={{color:styleList[myStyleIndex].textColor}} />} 
                         variant="outlined"
                         label={<Typography className={classes.nutrientText}>
-                            {item} {item.match(/\((.*?)\)/)[1]}<b>{nutrientSum.toFixed(2)} </b></Typography>}
+                            {item} <b>{nutrientSum.toFixed(2)} </b></Typography>}
                         onDelete={(e) => {}}
                         deleteIcon={<Icon >{styleList[myStyleIndex].icon}</Icon>}
                     />
