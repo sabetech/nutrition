@@ -174,7 +174,7 @@ export default function JsUploadSpreadsheet(
     }
 
     const getNutrientHeaders = (row) => {
-      row.push("Eau + Alcool");
+      row.push("Eau + Alcool (g/100g)");
       return row.slice(3);
     }
 

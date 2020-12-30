@@ -147,14 +147,14 @@ export default function SummariesAliment({aliment_portion, nutrientCompo}){
                 (
                 <div>
                     <PrettoSlider 
-                        //valueLabelDisplay="auto" 
+                        valueLabelFormat={x => x+"%"}
                         aria-label="pretto slider" 
                         value={nutrientPercent} 
                         valueLabelDisplay="on"
                         step={1}
                         style={{color:progressClassNames[progressBarColorIndex].color}}
                         />
-                    <Typography gutterBottom>{item}</Typography>
+                    <Typography gutterBottom>{item}: <b>{nutrientSum.toFixed(2)} </b></Typography>
                 </div>
                 ) :
                 (
@@ -164,7 +164,7 @@ export default function SummariesAliment({aliment_portion, nutrientCompo}){
                         icon={<RestaurantIcon style={{color:styleList[myStyleIndex].textColor}} />} 
                         variant="outlined"
                         label={<Typography className={classes.nutrientText}>
-                            {item} <b>{nutrientSum.toFixed(2)}</b></Typography>}
+                            {item}: <b>{nutrientSum.toFixed(2)} </b></Typography>}
                         onDelete={(e) => {}}
                         deleteIcon={<Icon >{styleList[myStyleIndex].icon}</Icon>}
                     />
