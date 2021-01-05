@@ -58,9 +58,6 @@ const classes = useStyles();
               setFileName={setFileName}
               setAlimentOptions={setAlimentOptions}
           />
-          <div style={{marginTop:20}}>
-            <a href="PHASE 2_Démo -12 sep.xlsx" >Download Sample Spreadsheet Here</a>
-          </div>
         </>
 
         }

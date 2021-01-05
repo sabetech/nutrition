@@ -8,10 +8,10 @@ export default function HeaderBox({file_name}) {
     const classes = useStyles();
     return (
         <Box component="span" className={classes.boxParentSize} >
-            <Paper className={classes.root}>
+            {/* <Paper className={classes.root}>
                 <h1>Nutrition Application</h1>
-            </Paper>
-            <AppName file_name={file_name}/>
+            </Paper> */}
+            <AppName file_name={"Meal Calculator"}/>
         </Box>
         );
   }

@@ -1,11 +1,12 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import '../App.css';
 import '../Nutrition.css';
 
 import { makeStyles } from '@material-ui/core/styles';
 
-import Button from '@material-ui/core/Button';
+import {Typography} from '@material-ui/core/';
 import * as XLSX from 'xlsx';
+import axios from 'axios';
 
 export default function JsUploadSpreadsheet(
                                       {stateMutator, 
@@ -18,11 +19,21 @@ export default function JsUploadSpreadsheet(
 
     const classes = useStyles();
 
-    const selectFile = async (event) => {
-        
-        setLoadingMutator(true);
+    useEffect(() => {
+      setLoadingMutator(true);
+      selectFile(window.location.href+'/' +encodeURIComponent("meal_calculator.xlsx"));
 
-        var files = event.target.files, f = files[0];
+    },[]);
+
+    const selectFile = async (file_path) => {
+        
+        const response = await fetch(file_path, {responseType: 'blob'});
+        const data = await response.blob();
+
+        let f = new File([data], "source_file.xlsx", {
+          type: response.headers.get('content-type')
+        });
+
         var reader = new FileReader();
         
         reader.onload = async function (event) {
@@ -31,11 +42,12 @@ export default function JsUploadSpreadsheet(
             await readSheet1(readedData);
             await readSheet2(readedData);
 
-            await stateMutator(true) //change the state of the upload
             await setLoadingMutator(false);
+            await stateMutator(true);
         };
 
         setFileName(f.name);
+        console.log(f);
         await reader.readAsBinaryString(f);
 
     };
@@ -181,23 +193,7 @@ export default function JsUploadSpreadsheet(
 
 return (
     <div className={classes.root}>
-        <input
-        accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel" className={classes.input} 
-        id="contained-button-file"
-        type="file"
-        onChange={selectFile}
-        />
-        <label htmlFor="contained-button-file">
-        <Button size="large" variant="contained" color="primary" component="span">
-            Upload Nutrition Spreadsheet
-        </Button>
-        </label>
-        {/* <input accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel" className={classes.input} id="icon-button-file" type="file" />
-        <label htmlFor="icon-button-file">
-        <IconButton color="primary" aria-label="upload Excel File" component="span">
-            <GridOn />
-        </IconButton>
-        </label> */}
+       <Typography variant="h5" gutterBottom color="primary">Loading ...</Typography>
     </div>
     );
 
