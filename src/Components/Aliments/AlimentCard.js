@@ -3,10 +3,9 @@ import { makeStyles } from '@material-ui/core/styles';
 import { blue } from '@material-ui/core/colors';
 import {
     Card, 
-    CardHeader, 
+    CardActions,
     CardMedia, 
     CardContent, 
-    CardActions, 
     Avatar, 
     Typography,
     CircularProgress,
@@ -14,6 +13,7 @@ import {
     Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper
   } from '@material-ui/core/';
   import Autocomplete from '@material-ui/lab/Autocomplete';
+  import Skeleton from '@material-ui/lab/Skeleton';
   
   import axios from 'axios';
 
@@ -31,7 +31,8 @@ export default function AlimentCard(
     nutrientCompo, 
     setAlimentPortion,
     aliment_portion,
-    aliment_options
+    aliment_options,
+    aliment_images
   }) {
 
     const classes = useStyles();
@@ -75,27 +76,35 @@ export default function AlimentCard(
                               (element) => aliment === Object.keys(element)[0]
                             )][aliment].alim_grp_nom_fr;
 
-      set_aliment_compo_groupe_alimentaire(groupe_alim);        
-        
-        axios({
-            method: 'get',
-            url: `https://api.allorigins.win/get?url=${encodeURIComponent('https://yandex.com/images/search?text='+aliment+'&isize=medium')}`,
-        })
-        .then((response) => {
+      set_aliment_compo_groupe_alimentaire(groupe_alim); 
+      
+      if (aliment != null){
+        setImgSrc(aliment_images[aliment]);
+        setImageLoaded(true);
+      }
+      
+
+        // axios({
+        //     method: 'get',
+        //     url: `https://api.allorigins.win/get?url=${encodeURIComponent('https://yandex.com/images/search?text='+aliment+'&isize=medium')}`,
+        // })
+        // .then((response) => {
             
-            let imgSearch = response.data.contents;
+        //     let imgSearch = response.data.contents;
 
-            let skip = imgSearch.indexOf("\"freshness\":\"normal\",\"preview\"");
+        //     let skip = imgSearch.indexOf("\"freshness\":\"normal\",\"preview\"");
 
-            let startPos = imgSearch.indexOf("https", skip);
-            let endPos = imgSearch.indexOf("fileSizeInBytes", startPos);
+        //     let startPos = imgSearch.indexOf("https", skip);
+        //     let endPos = imgSearch.indexOf("fileSizeInBytes", startPos);
             
-            let finalString = imgSearch.substring(startPos, (endPos-3));
+        //     let finalString = imgSearch.substring(startPos, (endPos-3));
 
-            setImgSrc(finalString);
-            setImageLoaded(true);
-        })
-        .catch((e) => { console.warn(e)});
+        //     //check if image really exist else show something else
+        //     setImgSrc(finalString);
+        //     console.log(aliment+" xx "+finalString);
+        //     setImageLoaded(true);
+        // })
+        // .catch((e) => { console.warn(e)});
 
       
     }, [aliment, aliment_options]);
@@ -105,16 +114,9 @@ export default function AlimentCard(
     //https://yandex.com/images/search?text=Avocat%2C%20pulpe%2C%20cru&isize=medium
 
     return (
-        <Card className={classes.card}>
-            <CardHeader
-              avatar={
-                <Avatar aria-label="recipe" className={classes.avatar}>
-                  {aliment != null ? aliment[0]: ""}
-                </Avatar>
-              }
-              title={<Typography variant="h5" color="primary" component="p">{aliment}</Typography>}
-              subheader={`Sous-Groupe Alimentaire ${sous_groupe}`}
-            />
+      <div>
+        <Card >
+            
             {imageLoaded ? (
             <CardMedia
               className={classes.media}
@@ -122,20 +124,22 @@ export default function AlimentCard(
               title={aliment}
             />) 
             : 
-            <CircularProgress />
+            <Skeleton variant="rect" width={"100%"}  />
              
             }
-            <CardContent>
-                <Typography variant="subtitle1" color="primary" component="p">
-                Groupe Alimentaire: {groupe_alimentaire}
-                </Typography>
-            </CardContent>
-            <CardActions disableSpacing>
-                
-            </CardActions>
             
             <CardContent>
-                <Typography paragraph>Les Aliments</Typography>
+                <div style={{flexShrink: 1}}>
+                <Typography gutterBottom variant="h5" component="h2" color={"primary"} >
+                  {groupe_alimentaire.charAt(0).toUpperCase() + groupe_alimentaire.replace(/_/g,' ').slice(1)}
+                </Typography>
+                </div>
+
+                <Typography variant="subtitle1" color="primary" component="p">
+                {aliment}
+                </Typography>
+            </CardContent>
+            <CardContent>
                 <TextField
                   required
                   InputLabelProps={{
@@ -159,59 +163,29 @@ export default function AlimentCard(
                     }
                   }}
                 />
-
+              
+              
                 <Autocomplete
                   onChange={ (event, value) => handleAlimentChange(value) }
                   options={aliment_options[aliment_compo_group_alimentaire] || []}
                   getOptionLabel={(option) => option}
                   renderInput={(params) => <TextField {...params} label="Change Aliment" margin="normal" />}
                 />
-
-                <TableContainer component={Paper} style={{display:'none'}}>
-                  <Table className={classes.table} aria-label="simple table">
-                    <TableHead>
-                      <TableRow>
-                        <TableCell><strong>Le Nutriment</strong></TableCell>
-                        <TableCell align="right"><strong>Value</strong></TableCell>
-                      </TableRow>
-                    </TableHead>
-                    <TableBody>
-                    {
-                        nutrientCompo.aliments_data_nutrient_ref
-                          [nutrientCompo.aliments_data_nutrient_ref.findIndex
-                            (
-                              (element) => aliment === Object.keys(element)[0]
-                            )][aliment].les_nutrients.map((item) => 
-                              (
-                          <TableRow key={item.id}>
-                              <TableCell component="th" scope="row">
-                                {item.nutrient}
-                              </TableCell>
-
-                              <TableCell align="right">
-                                {(Number.parseFloat(item.value)  * Number.parseFloat(txtPortion)).toFixed(2)}
-                              </TableCell>
-                          </TableRow>
-                          )
-                        )
-                      }
-                    </TableBody>
-                  </Table>
-                </TableContainer>
-                
-            </CardContent>
+                </CardContent>
+              
         </Card>
+        </div>
     );
 
 }
 
 const useStyles = makeStyles((theme) =>({
     card: {
-      width: window.innerWidth - 30,
-      margin: 1,
+      //width: window.innerWidth - 30,
+      //margin: 1,
       marginTop: 10,
-      marginBottom: 50,
-      //background: "linear-gradient(#654ea3, #eaafc8)"
+      // marginBottom: 50,
+      //background: "linear-gradient(45deg, #56CCF2, #2F80ED)"
     },
     media: {
       height: 0,

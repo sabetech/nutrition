@@ -71,7 +71,7 @@ export default function JsUploadSpreadsheet(
               aliment: value[2],
               sous_groupe_alimentaire: value[1],
               groupe_alimentaire: value[0],
-              portion: value[3]
+              portion: 0
             });
         });
 
@@ -190,13 +190,9 @@ export default function JsUploadSpreadsheet(
       return row.slice(3);
     }
 
-
 return (
-    <div className={classes.root}>
-       <Typography variant="h5" gutterBottom color="primary">Loading ...</Typography>
-    </div>
+    <></>
     );
-
 }
 
 const useStyles = makeStyles((theme) => ({
