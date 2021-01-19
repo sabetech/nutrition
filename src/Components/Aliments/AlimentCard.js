@@ -131,12 +131,15 @@ export default function AlimentCard(
             <CardContent>
                 <div style={{flexShrink: 1}}>
                 <Typography gutterBottom variant="h5" component="h2" color={"primary"} >
-                  {groupe_alimentaire.charAt(0).toUpperCase() + groupe_alimentaire.replace(/_/g,' ').slice(1)}
+                  {groupe_alimentaire.charAt(0).toUpperCase() 
+                  + groupe_alimentaire.replaceAll("_"," ").slice(1) 
+                  + new String(Array(45 - groupe_alimentaire.length).fill("\xa0").join(" ")).toString()  }
                 </Typography>
                 </div>
 
                 <Typography variant="subtitle1" color="primary" component="p">
-                {aliment}
+                {aliment 
+                +new String(Array(Math.max(0, (60 - aliment.length))).fill("\xa0").join(" ")).toString() }
                 </Typography>
             </CardContent>
             <CardContent>
