@@ -7,7 +7,7 @@ import Toolbar from '@material-ui/core/Toolbar';
 export default function AppName({file_name}) {
     const classes = useStyles();
     return (
-        <AppBar position="static">
+        <AppBar position="static" color="primary">
         <Toolbar>
           <Typography variant="h6" className={classes.title}>
             {file_name}
@@ -28,4 +28,7 @@ export default function AppName({file_name}) {
       flexGrow: 1,
       textAlign: 'left'
     },
+    myAppbarColor: {
+      background: 'linear-gradient(45deg, #DA22FF 30%, #9733EE 90%)'
+    }
   }));

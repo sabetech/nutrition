@@ -1,17 +1,18 @@
 import React, {useEffect, useState} from 'react';
 import '../../App.css';
 import '../../Nutrition.css';
-import {Container, Box} from '@material-ui/core/';
 import HeaderBox from '../../Components/Header/headerBox';
 import { makeStyles } from '@material-ui/core/styles';
 import JsUploadSpreadsheet from '../../Components/JS_Uploadspreadsheet';
-import {
-  Paper, 
-  Card,CardContent,Typography, LinearProgress
-} from '@material-ui/core/';
+  import { 
+    Card,CardContent,Typography, LinearProgress
+  } from '@material-ui/core/';
 import AlimentCard from '../../Components/Aliments/AlimentCard';
 import SummariesAliment from '../../Components/Aliments/SummariesAliment';
-import Carousel from 'react-elastic-carousel'
+import "react-responsive-carousel/lib/styles/carousel.min.css";
+import { Carousel } from 'react-responsive-carousel';
+import Pagination from '../../Components/Aliments/Pagination';
+import aliment_images from '../../resources/aliment_images.json';
 
 
 export default function Home() {
@@ -22,6 +23,7 @@ const [spreadsheetData, setSpreadsheetData] = useState({});
 const [spreadsheetCompo, setSpreadsheetCompo] = useState({});
 const [loading, setLoading] = useState(false);
 const [aliment_options, setAlimentOptions] = useState([]);
+const [currentAlimentIndex, setCurrentAlimentIndex] = useState(0);
 
 const classes = useStyles();
 
@@ -42,7 +44,7 @@ const classes = useStyles();
   }, [spreadsheetData, aliment_options]);
 
   return (
-    <Container >
+    <div >
         <HeaderBox file_name={file_name}/>
         
         {
@@ -69,7 +71,44 @@ const classes = useStyles();
 
         {
           uploaded &&
-            <Paper elevation={3} className={classes.root}>
+            <div className={classes.root}>
+              <Carousel 
+                  showArrows={true}
+                  showThumbs={false}
+                  statusFormatter={()=> ""}
+                  renderIndicator={()=><></>}
+                  selectedItem={currentAlimentIndex}
+                  onChange={(index) => setCurrentAlimentIndex(index)}
+                  
+              >
+              {
+              spreadsheetData.aliments.map((item, index) => 
+                  <AlimentCard
+                        id={index}  
+                        key={index}
+                        aliment={(item != null) ? item.aliment : ""} 
+                        sous_groupe={(item != null) ? item.sous_groupe_alimentaire : ""}
+                        groupe_alimentaire={(item != null) ? item.groupe_alimentaire : ""}
+                        portion={(item != null) ? item.portion : ""} 
+                        spreadsheetData={spreadsheetData}
+                        setSpreadsheetData={setSpreadsheetData} 
+                        nutrientCompo={spreadsheetCompo}
+                        setAlimentPortion={setAlimentPortion}
+                        aliment_portion={aliment_portion}
+                        aliment_options={aliment_options}
+                        aliment_images={aliment_images}
+                  />
+                )
+              }
+             </Carousel>
+
+              <Pagination pages={[...Array(11).keys()]}
+                      activePage={currentAlimentIndex}
+                      onClick={setCurrentAlimentIndex}
+                      spreadsheetData={spreadsheetData.aliments}
+                />
+
+
               <Card className={classes.summary_root}>
                 <CardContent>
                   <Typography className={classes.title} >
@@ -84,43 +123,25 @@ const classes = useStyles();
                 </CardContent>        
               </Card>
 
-              <Carousel itemsToShow={1}>
-              {
-              spreadsheetData.aliments.map((item, index) => 
-                    <AlimentCard
-                          id={index}  
-                          key={index}
-                          aliment={(item != null) ? item.aliment : ""} 
-                          sous_groupe={(item != null) ? item.sous_groupe_alimentaire : ""}
-                          groupe_alimentaire={(item != null) ? item.groupe_alimentaire : ""}
-                          portion={(item != null) ? item.portion : ""} 
-                          spreadsheetData={spreadsheetData}
-                          setSpreadsheetData={setSpreadsheetData} 
-                          nutrientCompo={spreadsheetCompo}
-                          setAlimentPortion={setAlimentPortion}
-                          aliment_portion={aliment_portion}
-                          aliment_options={aliment_options}  
-                    />
-                )
-              }
-             </Carousel>
-            <Box component="span" m={1}>
               
-            </Box>
-          </Paper>
+            {/* <Box component="span" m={1}>
+              
+            </Box> */}
+          </div>
         }
     
-    </Container>
+    </div>
   );
   }
 
   const useStyles = makeStyles({
     root: {
-      background: 'linear-gradient(45deg, rgba(255,255,255,0.9) 30%, #rgba(225,225,255,0.4) 90%)',
+      background: 'linear-gradient(45deg, rgba(255,255,255,0.9) 30%, #rgba(225,225,2,0.4) 90%)',
       border: 0,
       borderRadius: 3,
       boxShadow: '0 3px 5px 2px rgba(10, 10, 0, .1)',
       color: 'white',
+      flex: 1
     },
     food_card:{
       flexGrow: 1
