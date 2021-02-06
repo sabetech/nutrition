@@ -158,6 +158,7 @@ export default function SummariesAliment({aliment_portion, nutrientCompo}){
                 </div>
                 ) :
                 (
+                    (item === "Eau + Alcool (g/100g)") &&
                     <Chip 
                         key={index}
                         style={{margin: "0.5%", backgroundColor: styleList[myStyleIndex].backgroundColor, color: styleList[myStyleIndex].textColor}}

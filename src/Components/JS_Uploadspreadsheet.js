@@ -47,7 +47,6 @@ export default function JsUploadSpreadsheet(
         };
 
         setFileName(f.name);
-        console.log(f);
         await reader.readAsBinaryString(f);
 
     };

@@ -172,7 +172,7 @@ export default function AlimentCard(
                   onChange={ (event, value) => handleAlimentChange(value) }
                   options={aliment_options[aliment_compo_group_alimentaire] || []}
                   getOptionLabel={(option) => option}
-                  renderInput={(params) => <TextField {...params} label="Change Aliment" margin="normal" />}
+                  renderInput={(params) => <TextField {...params} label="Choisir un Aliment" margin="normal" />}
                 />
                 </CardContent>
               
