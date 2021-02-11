@@ -18,7 +18,6 @@ export default function  Pagination({pages, activePage, onClick, spreadsheetData
     
   const classes = useStyles();
 
-    console.log(spreadsheetData);
     return (
       <FormControl variant="filled" className={classes.formControl}>
       <InputLabel id="demo-simple-select-filled-label">Groupe Alimentaire</InputLabel>

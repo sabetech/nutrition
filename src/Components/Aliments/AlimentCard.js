@@ -14,6 +14,7 @@ import {
   } from '@material-ui/core/';
   import Autocomplete from '@material-ui/lab/Autocomplete';
   import Skeleton from '@material-ui/lab/Skeleton';
+  import ReactImageAppear from 'react-image-appear';
   
   import axios from 'axios';
 
@@ -83,35 +84,7 @@ export default function AlimentCard(
         setImageLoaded(true);
       }
       
-
-        // axios({
-        //     method: 'get',
-        //     url: `https://api.allorigins.win/get?url=${encodeURIComponent('https://yandex.com/images/search?text='+aliment+'&isize=medium')}`,
-        // })
-        // .then((response) => {
-            
-        //     let imgSearch = response.data.contents;
-
-        //     let skip = imgSearch.indexOf("\"freshness\":\"normal\",\"preview\"");
-
-        //     let startPos = imgSearch.indexOf("https", skip);
-        //     let endPos = imgSearch.indexOf("fileSizeInBytes", startPos);
-            
-        //     let finalString = imgSearch.substring(startPos, (endPos-3));
-
-        //     //check if image really exist else show something else
-        //     setImgSrc(finalString);
-        //     console.log(aliment+" xx "+finalString);
-        //     setImageLoaded(true);
-        // })
-        // .catch((e) => { console.warn(e)});
-
-      
     }, [aliment, aliment_options]);
-
-    //https://www.google.com/search?tbm=isch&source=hp&biw=1015&bih=763&q=Soupe aux légumes variés, préemballée à réchauffer
-
-    //https://yandex.com/images/search?text=Avocat%2C%20pulpe%2C%20cru&isize=medium
 
     return (
       <div>
@@ -119,10 +92,16 @@ export default function AlimentCard(
             
             {imageLoaded ? (
             <CardMedia
-              className={classes.media}
-              image={imgsrc}
               title={aliment}
-            />) 
+            >
+              <ReactImageAppear 
+                  src={imgsrc}
+                  animation="zoomIn"
+                  animationDuration="0.5s"
+                  className={classes.media}
+              />
+              
+            </CardMedia>) 
             : 
             <Skeleton variant="rect" width={"100%"}  />
              
@@ -191,8 +170,14 @@ const useStyles = makeStyles((theme) =>({
       //background: "linear-gradient(45deg, #56CCF2, #2F80ED)"
     },
     media: {
-      height: 0,
-      paddingTop: '56.25%', // 16:9
+      display: 'block',
+      backgroundSize: 'cover',
+      backgroundRepeat: 'no-repeat',
+      backgroundPosition: 'center',
+      width: '100%',
+      height: '250px',
+      objectFit: 'cover',
+      //paddingTop: '56.25%', // 16:9
     },
     expand: {
       transform: 'rotate(0deg)',
