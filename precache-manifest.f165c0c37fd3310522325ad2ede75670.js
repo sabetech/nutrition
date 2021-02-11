@@ -1,27 +1,27 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "e623f0664ddfce2d27b87efc9a2f8f20",
+    "revision": "2cf80b00863fcae4eb1fc38341279b7e",
     "url": "/nutrition/index.html"
   },
   {
-    "revision": "5a3dc310abf0db6306c9",
-    "url": "/nutrition/static/css/2.e3eab40c.chunk.css"
+    "revision": "62f0f753f057f663f2a7",
+    "url": "/nutrition/static/css/2.c6a9ed5e.chunk.css"
   },
   {
-    "revision": "0bb19ab7c83cc0a26d2f",
+    "revision": "995fc118ea3ec69fbc49",
     "url": "/nutrition/static/css/main.f59227dd.chunk.css"
   },
   {
-    "revision": "5a3dc310abf0db6306c9",
-    "url": "/nutrition/static/js/2.e0daa381.chunk.js"
+    "revision": "62f0f753f057f663f2a7",
+    "url": "/nutrition/static/js/2.9649cd52.chunk.js"
   },
   {
-    "revision": "8fd9d7ae7fb3b5a29826c6b774a14385",
-    "url": "/nutrition/static/js/2.e0daa381.chunk.js.LICENSE.txt"
+    "revision": "5e1e46b95e6074ffc856c691b0d56676",
+    "url": "/nutrition/static/js/2.9649cd52.chunk.js.LICENSE.txt"
   },
   {
-    "revision": "0bb19ab7c83cc0a26d2f",
-    "url": "/nutrition/static/js/main.b728ec20.chunk.js"
+    "revision": "995fc118ea3ec69fbc49",
+    "url": "/nutrition/static/js/main.bb648073.chunk.js"
   },
   {
     "revision": "5d20eeaa319e6de3d236",
