@@ -45,8 +45,6 @@ const classes = useStyles();
 
   return (
     <div >
-        <HeaderBox file_name={file_name}/>
-        
         {
         !uploaded &&
         

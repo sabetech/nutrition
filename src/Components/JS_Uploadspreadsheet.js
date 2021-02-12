@@ -131,7 +131,7 @@ export default function JsUploadSpreadsheet(
               les_nutrients: [
                 {
                   id: ++index,
-                  nutrient: sheet2Info.nutrient_headers[0],
+                  nutrient: "Energie, Règlement UE N° 1169/2011 (kcal/100g)",
                   value: value[3].toString().replace(',', '.')
                 },
                 {
@@ -186,6 +186,7 @@ export default function JsUploadSpreadsheet(
 
     const getNutrientHeaders = (row) => {
       row.push("Eau + Alcool (g/100g)");
+      row[3] = "Energie (kcal/100g)";
       return row.slice(3);
     }
 
