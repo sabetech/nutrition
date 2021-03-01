@@ -14,6 +14,7 @@ import { Carousel } from 'react-responsive-carousel';
 import Pagination from '../../Components/Aliments/Pagination';
 import aliment_images from '../../resources/aliment_images.json';
 
+//https://cdn.iconscout.com/icon/free/png-256/no-image-1771002-1505134.png
 
 export default function Home() {
 const [uploaded, setUploadState] = useState(false);
