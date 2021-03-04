@@ -4,15 +4,13 @@ import '../Nutrition.css';
 
 import { makeStyles } from '@material-ui/core/styles';
 
-import {Typography} from '@material-ui/core/';
+
 import * as XLSX from 'xlsx';
-import axios from 'axios';
+
 
 export default function JsUploadSpreadsheet(
                                       {stateMutator, 
-                                      spreadSheetMutator, 
                                       spreadSheetCompoMutator, 
-                                      setAlimentPortionMutator, 
                                       setLoadingMutator, 
                                       setFileName,
                                       setAlimentOptions}){
@@ -39,7 +37,7 @@ export default function JsUploadSpreadsheet(
         reader.onload = async function (event) {
             var data = event.target.result;
             let readedData = XLSX.read(data, {type: 'binary'});
-            await readSheet1(readedData);
+            
             await readSheet2(readedData);
 
             await setLoadingMutator(false);
@@ -50,40 +48,6 @@ export default function JsUploadSpreadsheet(
         await reader.readAsBinaryString(f);
 
     };
-
-    const readSheet1 = (readedData) => {
-        const wsname = readedData.SheetNames[0];
-        const ws = readedData.Sheets[wsname];
-            
-        /* Convert array to json*/
-        const dataParse = XLSX.utils.sheet_to_json(ws, {header:1});
-        let sheet1Info = {}, count = 0;
-        sheet1Info.aliments = [];
-
-        dataParse.forEach(value => {
-          count++;
-          if (count === 1) return;
-          if (value[0] == null) return;
-          if (value.length === 0) return;
-
-          sheet1Info.aliments.push({
-              aliment: value[2],
-              sous_groupe_alimentaire: value[1],
-              groupe_alimentaire: value[0],
-              portion: 0
-            });
-        });
-
-        spreadSheetMutator(sheet1Info);
-        let myAlimentObj = {};
-        sheet1Info.aliments.forEach((item) => {
-            myAlimentObj[item.aliment] = item.portion;
-        });
-        setAlimentPortionMutator(
-          myAlimentObj
-        );
-
-    }
 
     const readSheet2 = (readedData) => {
       const wsname = readedData.SheetNames[1];
@@ -106,7 +70,10 @@ export default function JsUploadSpreadsheet(
               groupe_aliments[item[0]].push(item[2])
             }
         });
-
+        Object.keys(groupe_aliments).map((item) => {
+            groupe_aliments[item].sort();
+        });
+        console.log(groupe_aliments)
         setAlimentOptions(groupe_aliments);
         
     }

@@ -3,88 +3,66 @@ import { makeStyles } from '@material-ui/core/styles';
 import { blue } from '@material-ui/core/colors';
 import {
     Card, 
-    CardActions,
     CardMedia, 
     CardContent, 
-    Avatar, 
     Typography,
-    CircularProgress,
     TextField,
-    Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper
   } from '@material-ui/core/';
   import Autocomplete from '@material-ui/lab/Autocomplete';
   import Skeleton from '@material-ui/lab/Skeleton';
   import ReactImageAppear from 'react-image-appear';
   
-  import axios from 'axios';
-
-  
 
 export default function AlimentCard(
   {
-    id,
-    aliment, 
-    sous_groupe, 
-    groupe_alimentaire, 
-    portion, 
-    spreadsheetData,
-    setSpreadsheetData,
-    nutrientCompo, 
-    setAlimentPortion,
-    aliment_portion,
+    groupe_alimentaire,
     aliment_options,
+    setSelectedAliments,
+    selectedAliments,
     aliment_images
   }) {
 
     const classes = useStyles();
     const [imageLoaded, setImageLoaded] = useState(false);
     const [imgsrc, setImgSrc] = useState("");
-    const [txtPortion, setTxtPortion] = useState(portion);
-    const [aliment_compo_group_alimentaire, set_aliment_compo_groupe_alimentaire] = useState("");
+    const [txtPortion, setTxtPortion] = useState(0);
+    const [aliment, setAliment] = useState("");
     
 
     const handleAlimentChange = (value) => {
         
-        let groupe_alim = nutrientCompo.aliments_data_nutrient_ref
-                          [nutrientCompo.aliments_data_nutrient_ref.findIndex
-                            (
-                              (element) => value === Object.keys(element)[0]
-                            )][value].alim_grp_nom_fr;
-        
-        let sous_groupe_alim = nutrientCompo.aliments_data_nutrient_ref 
-        [nutrientCompo.aliments_data_nutrient_ref.findIndex
-          (
-            (element) => value === Object.keys(element)[0]
-          )][value].alim_ssgrp_nom_fr;
+        setAliment(value);
 
-        spreadsheetData.aliments.splice(id, 1, {
-            aliment: value,
-            sous_groupe_alimentaire: sous_groupe_alim,
-            groupe_alimentaire: groupe_alim,
-            portion: txtPortion
-        });
+        //structure of aliment goes here ...
+        
 
         setImageLoaded(false);
-        setSpreadsheetData({...spreadsheetData, aliments: spreadsheetData.aliments});
+        setSelectedAliments({...selectedAliments, [groupe_alimentaire]: {aliment: value, portion: txtPortion}});
 
     }
 
     useEffect(() => {
-        
-      let groupe_alim = nutrientCompo.aliments_data_nutrient_ref
-                          [nutrientCompo.aliments_data_nutrient_ref.findIndex
-                            (
-                              (element) => aliment === Object.keys(element)[0]
-                            )][aliment].alim_grp_nom_fr;
 
-      set_aliment_compo_groupe_alimentaire(groupe_alim); 
-      
-      if (aliment != null){
+      if (aliment !== "")
+        setSelectedAliments({...selectedAliments, [groupe_alimentaire] : {aliment:aliment, portion: txtPortion}});
+
+      //check if aliment changed ...
+      if (imgsrc === aliment_images[aliment]) return;
+
+      if (aliment != ""){
         setImgSrc(aliment_images[aliment]);
+        setImageLoaded(true);
+      }else{
+        setImgSrc("https://i.stack.imgur.com/y9DpT.jpg");
+        setImageLoaded(true);
+      }
+
+      if (aliment === null){
+        setImgSrc("https://i.stack.imgur.com/y9DpT.jpg");
         setImageLoaded(true);
       }
       
-    }, [aliment, aliment_options]);
+    }, [aliment, txtPortion]);
 
     return (
       <div>
@@ -117,8 +95,10 @@ export default function AlimentCard(
                 </div>
 
                 <Typography variant="subtitle1" color="primary" component="p">
-                {aliment 
-                +new String(Array(Math.max(0, (60 - aliment.length))).fill("\xa0").join(" ")).toString() }
+                {
+                ((aliment !== "") && (aliment != null)) ? aliment:"Aucun Aliment sélectionné"
+                //+ new String(Array(Math.max(0, (60 - aliment.length))).fill("\xa0").join(" ")).toString() 
+                }
                 </Typography>
             </CardContent>
             <CardContent>
@@ -136,7 +116,6 @@ export default function AlimentCard(
                   onChange={(e) => {
                     if (e.target.value !== ""){
                       setTxtPortion(Number.parseFloat(e.target.value));
-                      setAlimentPortion({...aliment_portion, [aliment]:Number.parseFloat(e.target.value)})
                       if (Number.parseFloat(e.target.value) < 0){
                         setTxtPortion(0);
                       }  
@@ -148,8 +127,9 @@ export default function AlimentCard(
               
               
                 <Autocomplete
+                  freeSolo
                   onChange={ (event, value) => handleAlimentChange(value) }
-                  options={aliment_options[aliment_compo_group_alimentaire] || []}
+                  options={aliment_options || []}
                   getOptionLabel={(option) => option}
                   renderInput={(params) => <TextField {...params} label="Choisir un Aliment" margin="normal" />}
                 />

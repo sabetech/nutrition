@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { Chip, Icon, Typography, Slider, withStyles } from '@material-ui/core';
 import RestaurantIcon from '@material-ui/icons/Restaurant';
@@ -6,7 +6,37 @@ import RestaurantIcon from '@material-ui/icons/Restaurant';
 
 
 
-export default function SummariesAliment({aliment_portion, nutrientCompo}){
+export default function SummariesAliment({selectedAliments, nutrientCompo}){
+
+    const [nutrientSums, setNutrientSums] = useState([]);
+    let myTempArray = [];
+
+    useEffect(() => {
+        myTempArray = [];
+        console.log(selectedAliments);
+        nutrientCompo.nutrient_headers.map((item, header_index) => {
+
+            const sum = Object.keys(selectedAliments).reduce((prev, curItem, index) => {
+                
+                if (selectedAliments[curItem].aliment === null) return prev + 0;
+
+                const nutVal = nutrientCompo.aliments_data_nutrient_ref
+                                [
+                        nutrientCompo.aliments_data_nutrient_ref.findIndex((element) => selectedAliments[curItem].aliment === Object.keys(element)[0])
+                                 ][selectedAliments[curItem].aliment].les_nutrients[header_index].value
+
+                return prev + (selectedAliments[curItem].portion * nutVal);
+            }, 0);
+
+            myTempArray.push({
+                nutrient_name: item, nutrient_sum: sum
+            })
+        })
+
+        setNutrientSums(myTempArray);
+
+    }, [selectedAliments]);
+
     const PrettoSlider = withStyles(theme => ({
         root: {
           height: 8,
@@ -112,49 +142,32 @@ export default function SummariesAliment({aliment_portion, nutrientCompo}){
 
     ]
     
-    return (<div className={classes.root}>
-       {
-           nutrientCompo.nutrient_headers.map((item, index) => {
-               let myStyleIndex = 0, progressBarColorIndex = 0;
-               if (!item) return;
-                const nutrientSum = Object.keys(aliment_portion).reduce((previousValue, currentValue) =>{
-                    const nutrientValue = nutrientCompo.aliments_data_nutrient_ref
-                        [
-                            nutrientCompo.aliments_data_nutrient_ref.findIndex
-                            (
-                            (element) => currentValue === Object.keys(element)[0]
-                            )
-                        ][currentValue].les_nutrients[index].value
-                    let prdt = aliment_portion[currentValue] * Number.parseFloat(nutrientValue);
-                    
-                    return previousValue + prdt;
-                }, 0);
+    return ( 
+        <div className={classes.root}>
+            { nutrientSums.map((item, index) => {
+                let myStyleIndex = 0, progressBarColorIndex = 0;
+                myStyleIndex = (item.nutrient_sum >= nutrientConstraints[index].high) ? 2 : 
+                             (item.nutrient_sum > nutrientConstraints[index].mid) ? 1 : 0;
 
-                myStyleIndex = (nutrientSum >= nutrientConstraints[index].high) ? 2 : 
-                                        (nutrientSum > nutrientConstraints[index].mid) ? 1 : 0;
-
-                if (nutrientConstraints[index].high === 0) myStyleIndex = 3;
-
-                let nutrientPercent = ((nutrientSum/nutrientConstraints[index].high) * 100).toFixed(0);
-                
+                let nutrientPercent = ((item.nutrient_sum/nutrientConstraints[index].high) * 100).toFixed(0);
                 progressBarColorIndex = (nutrientPercent >= 75) ? 2 :
-                                            (nutrientPercent >= 50) ? 1 : 0;
-
+                                 (nutrientPercent >= 50) ? 1 : 0;
                 
-                return (
-                    <div key={index} style={{marginBottom: 20, width:"95%", paddingTop: 10}}>
-                    {(EAU != item) && (ALCOOL != item) && (GLUCIDES != item)  ?
+                
+                return ( 
+                <div key={index} style={{marginBottom: 20, width:"95%", paddingTop: 10}}>
+                    {(EAU != item.nutrient_name) && (ALCOOL != item.nutrient_name) && (GLUCIDES != item.nutrient_name)  ?
                 (
                 <div>
                     <PrettoSlider 
                         valueLabelFormat={x => x+"%"}
                         aria-label="pretto slider" 
-                        value={nutrientPercent} 
+                        value={((item.nutrient_sum/nutrientConstraints[index].high) * 100).toFixed(0)} 
                         valueLabelDisplay="on"
                         step={1}
                         style={{color:progressClassNames[progressBarColorIndex].color}}
                         />
-                    <Typography gutterBottom>{item}: <b>{nutrientSum.toFixed(2)} </b></Typography>
+                    <Typography gutterBottom>{item.nutrient_name}: <b>{item.nutrient_sum.toFixed(2)} </b></Typography>
                 </div>
                 ) :
                 (
@@ -165,16 +178,16 @@ export default function SummariesAliment({aliment_portion, nutrientCompo}){
                         icon={<RestaurantIcon style={{color:styleList[myStyleIndex].textColor}} />} 
                         variant="outlined"
                         label={<Typography className={classes.nutrientText}>
-                            {item}: <b>{nutrientSum.toFixed(2)} </b></Typography>}
+                            {item.nutrient_name}: <b>{item.nutrient_sum.toFixed(2)} </b></Typography>}
                         onDelete={(e) => {}}
                         deleteIcon={<Icon >{styleList[myStyleIndex].icon}</Icon>}
                     />
                     )}
             </div>)
-           })
-        }
+             })
+             }
         </div>
-        );
+    );
 } 
 
 const useStyles = makeStyles((theme) => ({
@@ -200,3 +213,63 @@ const useStyles = makeStyles((theme) => ({
     
   })
   );
+
+/*  nutrientCompo.nutrient_headers.map((item, index) => {
+    let myStyleIndex = 0, progressBarColorIndex = 0;
+    if (!item) return;
+     const nutrientSum = Object.keys(aliment_portion).reduce((previousValue, currentValue) =>{
+         const nutrientValue = nutrientCompo.aliments_data_nutrient_ref
+             [
+                 nutrientCompo.aliments_data_nutrient_ref.findIndex
+                 (
+                 (element) => currentValue === Object.keys(element)[0]
+                 )
+             ][currentValue].les_nutrients[index].value
+         let prdt = aliment_portion[currentValue] * Number.parseFloat(nutrientValue);
+         
+         return previousValue + prdt;
+     }, 0);
+
+     myStyleIndex = (nutrientSum >= nutrientConstraints[index].high) ? 2 : 
+                             (nutrientSum > nutrientConstraints[index].mid) ? 1 : 0;
+
+     if (nutrientConstraints[index].high === 0) myStyleIndex = 3;
+
+     let nutrientPercent = ((nutrientSum/nutrientConstraints[index].high) * 100).toFixed(0);
+     
+     progressBarColorIndex = (nutrientPercent >= 75) ? 2 :
+                                 (nutrientPercent >= 50) ? 1 : 0;
+
+     
+     return (
+         <div key={index} style={{marginBottom: 20, width:"95%", paddingTop: 10}}>
+         {(EAU != item) && (ALCOOL != item) && (GLUCIDES != item)  ?
+     (
+     <div>
+         <PrettoSlider 
+             valueLabelFormat={x => x+"%"}
+             aria-label="pretto slider" 
+             value={nutrientPercent} 
+             valueLabelDisplay="on"
+             step={1}
+             style={{color:progressClassNames[progressBarColorIndex].color}}
+             />
+         <Typography gutterBottom>{item}: <b>{nutrientSum.toFixed(2)} </b></Typography>
+     </div>
+     ) :
+     (
+         (item === "Eau + Alcool (g/100g)") &&
+         <Chip 
+             key={index}
+             style={{margin: "0.5%", backgroundColor: styleList[myStyleIndex].backgroundColor, color: styleList[myStyleIndex].textColor}}
+             icon={<RestaurantIcon style={{color:styleList[myStyleIndex].textColor}} />} 
+             variant="outlined"
+             label={<Typography className={classes.nutrientText}>
+                 {item}: <b>{nutrientSum.toFixed(2)} </b></Typography>}
+             onDelete={(e) => {}}
+             deleteIcon={<Icon >{styleList[myStyleIndex].icon}</Icon>}
+         />
+         )}
+ </div>)
+})
+*/

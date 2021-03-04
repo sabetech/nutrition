@@ -14,13 +14,13 @@ import { Carousel } from 'react-responsive-carousel';
 import Pagination from '../../Components/Aliments/Pagination';
 import aliment_images from '../../resources/aliment_images.json';
 
-//https://cdn.iconscout.com/icon/free/png-256/no-image-1771002-1505134.png
+
 
 export default function Home() {
 const [uploaded, setUploadState] = useState(false);
 const [file_name, setFileName] = useState("No File Uploaded")
 const [aliment_portion, setAlimentPortion] = useState({});
-const [spreadsheetData, setSpreadsheetData] = useState({});
+const [selectedAliments, setSelectedAliments] = useState({});
 const [spreadsheetCompo, setSpreadsheetCompo] = useState({});
 const [loading, setLoading] = useState(false);
 const [aliment_options, setAlimentOptions] = useState([]);
@@ -28,21 +28,10 @@ const [currentAlimentIndex, setCurrentAlimentIndex] = useState(0);
 
 const classes = useStyles();
 
-  useEffect(() => {
-      
-      if (typeof spreadsheetData.aliments == 'undefined') return;
-
-      let myAlimentObj = {};
-      spreadsheetData.aliments.forEach((item) => {
-          myAlimentObj[item.aliment] = item.portion;
-      });
-      
-      setAlimentPortion(
-        myAlimentObj
-      );
+  useEffect(() => {      
 
 
-  }, [spreadsheetData, aliment_options]);
+  }, []);
 
   return (
     <div >
@@ -52,9 +41,7 @@ const classes = useStyles();
         <>
           <JsUploadSpreadsheet 
               stateMutator={setUploadState} 
-              spreadSheetMutator={setSpreadsheetData} 
               spreadSheetCompoMutator={setSpreadsheetCompo} 
-              setAlimentPortionMutator={setAlimentPortion}
               setLoadingMutator={setLoading}
               setFileName={setFileName}
               setAlimentOptions={setAlimentOptions}
@@ -81,22 +68,17 @@ const classes = useStyles();
                   
               >
               {
-              spreadsheetData.aliments.map((item, index) => 
-                  <AlimentCard
-                        id={index}  
-                        key={index}
-                        aliment={(item != null) ? item.aliment : ""} 
-                        sous_groupe={(item != null) ? item.sous_groupe_alimentaire : ""}
-                        groupe_alimentaire={(item != null) ? item.groupe_alimentaire : ""}
-                        portion={(item != null) ? item.portion : ""} 
-                        spreadsheetData={spreadsheetData}
-                        setSpreadsheetData={setSpreadsheetData} 
-                        nutrientCompo={spreadsheetCompo}
-                        setAlimentPortion={setAlimentPortion}
-                        aliment_portion={aliment_portion}
-                        aliment_options={aliment_options}
-                        aliment_images={aliment_images}
+                Object.keys(aliment_options).map((_objkey, index) => (
+                  <AlimentCard 
+                    key={index}
+                    groupe_alimentaire={(_objkey != null) ? _objkey : ""}
+                    aliment_options={aliment_options[_objkey]}
+                    nutrientCompo={spreadsheetCompo}
+                    setSelectedAliments={setSelectedAliments}
+                    selectedAliments={selectedAliments}
+                    aliment_images={aliment_images}
                   />
+                )
                 )
               }
              </Carousel>
@@ -104,7 +86,7 @@ const classes = useStyles();
               <Pagination pages={[...Array(11).keys()]}
                       activePage={currentAlimentIndex}
                       onClick={setCurrentAlimentIndex}
-                      spreadsheetData={spreadsheetData.aliments}
+                      groupe_alimentaires={Object.keys(aliment_options)}
                 />
 
 
@@ -115,7 +97,7 @@ const classes = useStyles();
                   </Typography>
 
                   <SummariesAliment 
-                      aliment_portion={aliment_portion}
+                      selectedAliments={selectedAliments}
                       nutrientCompo={spreadsheetCompo}
                   />
 

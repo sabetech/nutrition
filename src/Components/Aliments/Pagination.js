@@ -14,7 +14,7 @@ import {
     },
   }));
 
-export default function  Pagination({pages, activePage, onClick, spreadsheetData}){
+export default function  Pagination({pages, activePage, onClick, groupe_alimentaires}){
     
   const classes = useStyles();
 
@@ -28,37 +28,37 @@ export default function  Pagination({pages, activePage, onClick, spreadsheetData
         onChange={(e) => onClick(e.target.value)}
       >
           <MenuItem value={0}>
-            {(spreadsheetData[0] != null) ? spreadsheetData[0].groupe_alimentaire : ""}
+            {(groupe_alimentaires[0] != null) ? groupe_alimentaires[0] : ""}
           </MenuItem>
           <MenuItem value={10}>
-            {(spreadsheetData[10] != null) ? spreadsheetData[10].groupe_alimentaire : ""}
+            {(groupe_alimentaires[10] != null) ? groupe_alimentaires[10] : ""}
           </MenuItem>
           <MenuItem value={2}>
-            {(spreadsheetData[2] != null) ? spreadsheetData[2].groupe_alimentaire : ""}
+            {(groupe_alimentaires[2] != null) ? groupe_alimentaires[2] : ""}
           </MenuItem>
           <MenuItem value={3}>
-            {(spreadsheetData[3] != null) ? spreadsheetData[3].groupe_alimentaire : ""}
+            {(groupe_alimentaires[3] != null) ? groupe_alimentaires[3] : ""}
           </MenuItem>
           <MenuItem value={4}>
-            {(spreadsheetData[4] != null) ? spreadsheetData[4].groupe_alimentaire : ""}
+            {(groupe_alimentaires[4] != null) ? groupe_alimentaires[4] : ""}
           </MenuItem>
           <MenuItem value={5}>
-            {(spreadsheetData[5] != null) ? spreadsheetData[5].groupe_alimentaire : ""}
+            {(groupe_alimentaires[5] != null) ? groupe_alimentaires[5] : ""}
           </MenuItem>
           <MenuItem value={6}>
-            {(spreadsheetData[6] != null) ? spreadsheetData[6].groupe_alimentaire : ""}
+            {(groupe_alimentaires[6] != null) ? groupe_alimentaires[6] : ""}
           </MenuItem>
           <MenuItem value={7}>
-            {(spreadsheetData[7] != null) ? spreadsheetData[7].groupe_alimentaire : ""}
+            {(groupe_alimentaires[7] != null) ? groupe_alimentaires[7] : ""}
           </MenuItem>
           <MenuItem value={8}>
-            {(spreadsheetData[8] != null) ? spreadsheetData[8].groupe_alimentaire : ""}
+            {(groupe_alimentaires[8] != null) ? groupe_alimentaires[8] : ""}
           </MenuItem>
           <MenuItem value={9}>
-            {(spreadsheetData[9] != null) ? spreadsheetData[9].groupe_alimentaire : ""}
+            {(groupe_alimentaires[9] != null) ? groupe_alimentaires[9] : ""}
           </MenuItem>
           <MenuItem value={1}>
-            {(spreadsheetData[1] != null) ? spreadsheetData[1].groupe_alimentaire : ""}
+            {(groupe_alimentaires[1] != null) ? groupe_alimentaires[1] : ""}
           </MenuItem>
           
       </Select>
