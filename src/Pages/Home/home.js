@@ -93,7 +93,7 @@ const classes = useStyles();
               <Card className={classes.summary_root}>
                 <CardContent>
                   <Typography className={classes.title} >
-                    Summaries
+                  Apports nutritionnels du jour
                   </Typography>
 
                   <SummariesAliment 
