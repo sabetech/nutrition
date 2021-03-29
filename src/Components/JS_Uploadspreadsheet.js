@@ -19,7 +19,7 @@ export default function JsUploadSpreadsheet(
 
     useEffect(() => {
       setLoadingMutator(true);
-      selectFile(window.location.href+'/' +encodeURIComponent("meal_calculator.xlsx"));
+      selectFile(window.location.href+'/' +encodeURIComponent("PHASE_2_Finale_revised.xlsx"));
 
     },[]);
 
@@ -28,7 +28,7 @@ export default function JsUploadSpreadsheet(
         const response = await fetch(file_path, {responseType: 'blob'});
         const data = await response.blob();
 
-        let f = new File([data], "source_file.xlsx", {
+        let f = new File([data], "PHASE_2_Finale_revised.xlsx", {
           type: response.headers.get('content-type')
         });
 
