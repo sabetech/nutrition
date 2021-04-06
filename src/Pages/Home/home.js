@@ -13,18 +13,19 @@ import "react-responsive-carousel/lib/styles/carousel.min.css";
 import { Carousel } from 'react-responsive-carousel';
 import Pagination from '../../Components/Aliments/Pagination';
 import aliment_images from '../../resources/aliment_images.json';
+import GroupeAlimentaireSelect from "../../Components/GroupeAlimentaire/groupe_alimentaire_select";
 
 
 
 export default function Home() {
 const [uploaded, setUploadState] = useState(false);
 const [file_name, setFileName] = useState("No File Uploaded")
-const [aliment_portion, setAlimentPortion] = useState({});
 const [selectedAliments, setSelectedAliments] = useState({});
 const [spreadsheetCompo, setSpreadsheetCompo] = useState({});
 const [loading, setLoading] = useState(false);
 const [aliment_options, setAlimentOptions] = useState([]);
-const [currentAlimentIndex, setCurrentAlimentIndex] = useState(0);
+const [selectedGroupAlimentaires, setSelectedGroupAlimentaires] = useState([]);
+const [currentlySelectedGroupAlimentaire, setCurrentlySelectedGroupAlimentaire] = useState("No Alimentaire Selected");
 
 const classes = useStyles();
 
@@ -58,37 +59,22 @@ const classes = useStyles();
         {
           uploaded &&
             <div className={classes.root}>
-              <Carousel 
-                  showArrows={true}
-                  showThumbs={false}
-                  statusFormatter={()=> ""}
-                  renderIndicator={()=><></>}
-                  selectedItem={currentAlimentIndex}
-                  onChange={(index) => setCurrentAlimentIndex(index)}
-                  
-              >
-              {
-                Object.keys(aliment_options).map((_objkey, index) => (
-                  <AlimentCard 
-                    key={index}
-                    groupe_alimentaire={(_objkey != null) ? _objkey : ""}
-                    aliment_options={aliment_options[_objkey]}
-                    nutrientCompo={spreadsheetCompo}
-                    setSelectedAliments={setSelectedAliments}
-                    selectedAliments={selectedAliments}
-                    aliment_images={aliment_images}
-                  />
-                )
-                )
-              }
-             </Carousel>
-
-              <Pagination pages={[...Array(11).keys()]}
-                      activePage={currentAlimentIndex}
-                      onClick={setCurrentAlimentIndex}
-                      groupe_alimentaires={Object.keys(aliment_options)}
-                />
-
+              
+              <AlimentCard 
+                  groupe_alimentaire={currentlySelectedGroupAlimentaire} 
+                  aliment_options={aliment_options} 
+                  setSelectedAliments={setSelectedAliments}
+                  selectedAliments={selectedAliments}
+                  aliment_images={aliment_images}
+              />
+              
+              <GroupeAlimentaireSelect 
+                  groupe_alimentaires={aliment_options} 
+                  selectedAliments={selectedAliments}
+                  setSelectedGroupAlimentaires={setSelectedGroupAlimentaires}
+                  selectedGroupAlimentaires={selectedGroupAlimentaires}
+                  setCurrentlySelectedGroupAlimentaire={setCurrentlySelectedGroupAlimentaire}
+              />
 
               <Card className={classes.summary_root}>
                 <CardContent>

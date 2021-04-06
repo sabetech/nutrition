@@ -33,16 +33,14 @@ export default function AlimentCard(
         
         setAliment(value);
 
-        //structure of aliment goes here ...
-        
-
         setImageLoaded(false);
+        
         setSelectedAliments({...selectedAliments, [groupe_alimentaire]: {aliment: value, portion: txtPortion}});
 
     }
 
     useEffect(() => {
-
+      
       if (aliment !== "")
         setSelectedAliments({...selectedAliments, [groupe_alimentaire] : {aliment:aliment, portion: txtPortion}});
 
@@ -62,7 +60,7 @@ export default function AlimentCard(
         setImageLoaded(true);
       }
       
-    }, [aliment, txtPortion]);
+    }, [aliment, txtPortion, groupe_alimentaire]);
 
     return (
       <div>
@@ -88,9 +86,11 @@ export default function AlimentCard(
             <CardContent>
                 <div style={{flexShrink: 1}}>
                 <Typography gutterBottom variant="h5" component="h2" color={"primary"} >
-                  {groupe_alimentaire.charAt(0).toUpperCase() 
+                  {groupe_alimentaire &&
+                  groupe_alimentaire.charAt(0).toUpperCase() 
                   + groupe_alimentaire.replaceAll("_"," ").slice(1) 
-                  + new String(Array(45 - groupe_alimentaire.length).fill("\xa0").join(" ")).toString()  }
+                  + new String(Array(45 - groupe_alimentaire.length).fill("\xa0").join(" ")).toString()  
+                  }
                 </Typography>
                 </div>
 
@@ -127,9 +127,10 @@ export default function AlimentCard(
               
               
                 <Autocomplete
+                  disabled={groupe_alimentaire === "No Alimentiare Chosen"}
                   freeSolo
                   onChange={ (event, value) => handleAlimentChange(value) }
-                  options={aliment_options || []}
+                  options={aliment_options[groupe_alimentaire] || []}
                   getOptionLabel={(option) => option}
                   renderInput={(params) => <TextField {...params} label="Choisir un Aliment" margin="normal" />}
                 />
