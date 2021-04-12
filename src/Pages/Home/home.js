@@ -25,7 +25,7 @@ const [spreadsheetCompo, setSpreadsheetCompo] = useState({});
 const [loading, setLoading] = useState(false);
 const [aliment_options, setAlimentOptions] = useState([]);
 const [selectedGroupAlimentaires, setSelectedGroupAlimentaires] = useState([]);
-const [currentlySelectedGroupAlimentaire, setCurrentlySelectedGroupAlimentaire] = useState("No Alimentaire Selected");
+const [currentlySelectedGroupAlimentaire, setCurrentlySelectedGroupAlimentaire] = useState("Aucun Groupe Alimentaire Sélectionné");
 
 const classes = useStyles();
 
@@ -74,6 +74,7 @@ const classes = useStyles();
                   setSelectedGroupAlimentaires={setSelectedGroupAlimentaires}
                   selectedGroupAlimentaires={selectedGroupAlimentaires}
                   setCurrentlySelectedGroupAlimentaire={setCurrentlySelectedGroupAlimentaire}
+                  currentlySelectedGroupAlimentaire={currentlySelectedGroupAlimentaire}
               />
 
               <Card className={classes.summary_root}>

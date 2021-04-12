@@ -11,6 +11,7 @@ import {
   import Autocomplete from '@material-ui/lab/Autocomplete';
   import Skeleton from '@material-ui/lab/Skeleton';
   import ReactImageAppear from 'react-image-appear';
+  import group_alim_images from "../../resources/alimentaire_images.json"
   
 
 export default function AlimentCard(
@@ -23,44 +24,76 @@ export default function AlimentCard(
   }) {
 
     const classes = useStyles();
-    const [imageLoaded, setImageLoaded] = useState(false);
-    const [imgsrc, setImgSrc] = useState("");
+    const [imageLoaded, setImageLoaded] = useState(true);
+    const [imgsrc, setImgSrc] = useState("https://i.stack.imgur.com/y9DpT.jpg");
     const [txtPortion, setTxtPortion] = useState(0);
     const [aliment, setAliment] = useState("");
     
 
     const handleAlimentChange = (value) => {
         
-        setAliment(value);
-
-        setImageLoaded(false);
+        modifySelectedAliment(value);
         
-        setSelectedAliments({...selectedAliments, [groupe_alimentaire]: {aliment: value, portion: txtPortion}});
+        setImageLoaded(false);
+    }
+
+    useEffect(() => {
+      if (aliment !== ""){
+        modifySelectedAliment(aliment)
+        //setSelectedAliments({...selectedAliments, [groupe_alimentaire] : {aliment:aliment, portion: txtPortion, group_alim: groupe_alimentaire}});
+        if (imgsrc === aliment_images[aliment]) return;
+        
+        setAlimentImage(aliment);
+        
+      } 
+    }, [aliment, txtPortion]);
+
+    const modifySelectedAliment = async (myAliment) => {
+      let groupe_alimentaire_value = groupe_alimentaire.substring(0, (groupe_alimentaire.indexOf("_") === -1) ? groupe_alimentaire.length : groupe_alimentaire.indexOf("_"))
+      setAliment(myAliment);
+      setSelectedAliments({...selectedAliments, [groupe_alimentaire]: {aliment: myAliment, portion: txtPortion, group_alim: groupe_alimentaire_value}});
 
     }
 
     useEffect(() => {
       
-      if (aliment !== "")
-        setSelectedAliments({...selectedAliments, [groupe_alimentaire] : {aliment:aliment, portion: txtPortion}});
-
-      //check if aliment changed ...
-      if (imgsrc === aliment_images[aliment]) return;
-
-      if (aliment != ""){
-        setImgSrc(aliment_images[aliment]);
-        setImageLoaded(true);
-      }else{
-        setImgSrc("https://i.stack.imgur.com/y9DpT.jpg");
-        setImageLoaded(true);
+      //check if this groupe_alimentaire is new or already existing to show
+      if (Object.keys(selectedAliments).some(item => item === groupe_alimentaire)) {
+        
+        setImageLoaded(false);
+        setAliment(selectedAliments[groupe_alimentaire].aliment);
+        setTxtPortion(selectedAliments[groupe_alimentaire].portion);
+        return;
       }
 
-      if (aliment === null){
-        setImgSrc("https://i.stack.imgur.com/y9DpT.jpg");
-        setImageLoaded(true);
-      }
+      groupeAlimentaireChangeEffect(groupe_alimentaire);
+
+    }, [groupe_alimentaire]);
+
+    const groupeAlimentaireChangeEffect = async (groupeAlimentaire) => {
+      let groupe_alimentaire_value = groupeAlimentaire.substring(0, (groupeAlimentaire.indexOf("_") === -1) ? groupeAlimentaire.length : groupeAlimentaire.indexOf("_"))
       
-    }, [aliment, txtPortion, groupe_alimentaire]);
+      if (typeof group_alim_images[groupe_alimentaire_value] != "undefined"){
+        setGroupeAlimentaireImageAsync(group_alim_images[groupe_alimentaire_value])
+        setAliment("");
+        setTxtPortion(0);
+        return;
+      }
+    }
+
+    const setGroupeAlimentaireImageAsync = async (imgUrl) => {
+      await setImageLoaded(false);
+      await setImgSrc(imgUrl);
+      await setImageLoaded(true);
+    }
+
+    const setAlimentImage = (myAliment) => {
+      
+      if (myAliment != ""){
+        setImgSrc(aliment_images[myAliment]);
+        setImageLoaded(true);
+      }
+    }
 
     return (
       <div>
@@ -127,12 +160,13 @@ export default function AlimentCard(
               
               
                 <Autocomplete
-                  disabled={groupe_alimentaire === "No Alimentiare Chosen"}
+                  disabled={groupe_alimentaire === "Aucun Aliment Sélectionné"}
                   freeSolo
                   onChange={ (event, value) => handleAlimentChange(value) }
-                  options={aliment_options[groupe_alimentaire] || []}
+                  options={aliment_options[groupe_alimentaire.substring(0, (groupe_alimentaire.indexOf("_") === -1) ? groupe_alimentaire.length : groupe_alimentaire.indexOf("_")) ] || []}
                   getOptionLabel={(option) => option}
                   renderInput={(params) => <TextField {...params} label="Choisir un Aliment" margin="normal" />}
+                  value={aliment}
                 />
                 </CardContent>
               

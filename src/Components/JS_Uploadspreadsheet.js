@@ -15,8 +15,6 @@ export default function JsUploadSpreadsheet(
                                       setFileName,
                                       setAlimentOptions}){
 
-    const classes = useStyles();
-
     useEffect(() => {
       setLoadingMutator(true);
       selectFile(window.location.href+'/' +encodeURIComponent("PHASE_2_Finale_revised.xlsx"));
