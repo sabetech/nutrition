@@ -13,7 +13,7 @@ export default function SummariesAliment({selectedAliments, nutrientCompo}){
 
     useEffect(() => {
         myTempArray = [];
-        console.log(selectedAliments);
+        console.log("selected objects "+Object.keys(selectedAliments).length);
         nutrientCompo.nutrient_headers.map((item, header_index) => {
 
             const sum = Object.keys(selectedAliments).reduce((prev, curItem, index) => {

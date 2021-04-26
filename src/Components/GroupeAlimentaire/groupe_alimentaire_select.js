@@ -48,7 +48,13 @@ export default function GroupeAlimentaireSelect({
 
     const updateSelectedAliments = async (deletedGroupAlimentaire) => {
         delete selectedAliments[deletedGroupAlimentaire];
-        await setSelectedAliments(selectedAliments);
+
+        if (Object.keys(selectedAliments).length == 0){
+            setSelectedAliments({});
+        }else{
+            await setSelectedAliments(selectedAliments);
+        }
+
     }
 
     const resetAlimentCard = () => {
