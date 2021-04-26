@@ -1,7 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import '../../App.css';
 import '../../Nutrition.css';
-import HeaderBox from '../../Components/Header/headerBox';
 import { makeStyles } from '@material-ui/core/styles';
 import JsUploadSpreadsheet from '../../Components/JS_Uploadspreadsheet';
   import { 
@@ -10,21 +9,19 @@ import JsUploadSpreadsheet from '../../Components/JS_Uploadspreadsheet';
 import AlimentCard from '../../Components/Aliments/AlimentCard';
 import SummariesAliment from '../../Components/Aliments/SummariesAliment';
 import "react-responsive-carousel/lib/styles/carousel.min.css";
-import { Carousel } from 'react-responsive-carousel';
-import Pagination from '../../Components/Aliments/Pagination';
+
 import aliment_images from '../../resources/aliment_images.json';
-import GroupeAlimentaireSelect from "../../Components/GroupeAlimentaire/groupe_alimentaire_select";
+
 
 
 
 export default function Home() {
 const [uploaded, setUploadState] = useState(false);
-const [file_name, setFileName] = useState("No File Uploaded")
 const [selectedAliments, setSelectedAliments] = useState({});
 const [spreadsheetCompo, setSpreadsheetCompo] = useState({});
 const [loading, setLoading] = useState(false);
 const [aliment_options, setAlimentOptions] = useState([]);
-const [selectedGroupAlimentaires, setSelectedGroupAlimentaires] = useState([]);
+
 const [currentlySelectedGroupAlimentaire, setCurrentlySelectedGroupAlimentaire] = useState("Aucun Groupe Alimentaire Sélectionné");
 
 const classes = useStyles();
@@ -44,7 +41,6 @@ const classes = useStyles();
               stateMutator={setUploadState} 
               spreadSheetCompoMutator={setSpreadsheetCompo} 
               setLoadingMutator={setLoading}
-              setFileName={setFileName}
               setAlimentOptions={setAlimentOptions}
           />
         </>
@@ -66,20 +62,14 @@ const classes = useStyles();
                   setSelectedAliments={setSelectedAliments}
                   selectedAliments={selectedAliments}
                   aliment_images={aliment_images}
+                  setCurrentlySelectedGroupAlimentaire={setCurrentlySelectedGroupAlimentaire}
               />
               
-              <GroupeAlimentaireSelect 
-                  groupe_alimentaires={aliment_options} 
-                  selectedAliments={selectedAliments}
-                  setSelectedGroupAlimentaires={setSelectedGroupAlimentaires}
-                  selectedGroupAlimentaires={selectedGroupAlimentaires}
-                  setCurrentlySelectedGroupAlimentaire={setCurrentlySelectedGroupAlimentaire}
-                  currentlySelectedGroupAlimentaire={currentlySelectedGroupAlimentaire}
-              />
+              
 
-              <Card className={classes.summary_root}>
+              <Card className={classes.summary_root} style={{zIndex:-1}}>
                 <CardContent>
-                  <Typography className={classes.title} >
+                <Typography gutterBottom variant="h5" component="h2" color={"primary"} >
                   Apports nutritionnels du jour
                   </Typography>
 

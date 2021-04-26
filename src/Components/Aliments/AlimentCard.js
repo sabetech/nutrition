@@ -12,6 +12,7 @@ import {
   import Skeleton from '@material-ui/lab/Skeleton';
   import ReactImageAppear from 'react-image-appear';
   import group_alim_images from "../../resources/alimentaire_images.json"
+  import GroupeAlimentaireSelect from "../../Components/GroupeAlimentaire/groupe_alimentaire_select";
   
 
 export default function AlimentCard(
@@ -20,14 +21,17 @@ export default function AlimentCard(
     aliment_options,
     setSelectedAliments,
     selectedAliments,
-    aliment_images
+    aliment_images,
+    setCurrentlySelectedGroupAlimentaire
   }) {
 
+    const logoImg = "https://lh3.googleusercontent.com/d/1k-WtjRYpUXyRqjaTZfJlQUz3gTwEBUAx=s220?authuser=0";
     const classes = useStyles();
     const [imageLoaded, setImageLoaded] = useState(true);
-    const [imgsrc, setImgSrc] = useState("https://i.stack.imgur.com/y9DpT.jpg");
+    const [imgsrc, setImgSrc] = useState(logoImg);
     const [txtPortion, setTxtPortion] = useState(0);
     const [aliment, setAliment] = useState("");
+    const [selectedGroupAlimentaires, setSelectedGroupAlimentaires] = useState([]);
     
 
     const handleAlimentChange = (value) => {
@@ -38,9 +42,10 @@ export default function AlimentCard(
     }
 
     useEffect(() => {
+      
       if (aliment !== ""){
         modifySelectedAliment(aliment)
-        //setSelectedAliments({...selectedAliments, [groupe_alimentaire] : {aliment:aliment, portion: txtPortion, group_alim: groupe_alimentaire}});
+        
         if (imgsrc === aliment_images[aliment]) return;
         
         setAlimentImage(aliment);
@@ -49,7 +54,7 @@ export default function AlimentCard(
     }, [aliment, txtPortion]);
 
     const modifySelectedAliment = async (myAliment) => {
-      let groupe_alimentaire_value = groupe_alimentaire.substring(0, (groupe_alimentaire.indexOf("_") === -1) ? groupe_alimentaire.length : groupe_alimentaire.indexOf("_"))
+      let groupe_alimentaire_value = groupe_alimentaire.substring(0, (groupe_alimentaire.indexOf("_") === -1) ? groupe_alimentaire.length : groupe_alimentaire.indexOf("_"));
       setAliment(myAliment);
       setSelectedAliments({...selectedAliments, [groupe_alimentaire]: {aliment: myAliment, portion: txtPortion, group_alim: groupe_alimentaire_value}});
 
@@ -63,10 +68,14 @@ export default function AlimentCard(
         setImageLoaded(false);
         setAliment(selectedAliments[groupe_alimentaire].aliment);
         setTxtPortion(selectedAliments[groupe_alimentaire].portion);
+        
         return;
       }
 
-      groupeAlimentaireChangeEffect(groupe_alimentaire);
+      if (selectedGroupAlimentaires.length > 0)
+        groupeAlimentaireChangeEffect(groupe_alimentaire);
+      else
+        resetAlimentCard();
 
     }, [groupe_alimentaire]);
 
@@ -74,9 +83,9 @@ export default function AlimentCard(
       let groupe_alimentaire_value = groupeAlimentaire.substring(0, (groupeAlimentaire.indexOf("_") === -1) ? groupeAlimentaire.length : groupeAlimentaire.indexOf("_"))
       
       if (typeof group_alim_images[groupe_alimentaire_value] != "undefined"){
-        setGroupeAlimentaireImageAsync(group_alim_images[groupe_alimentaire_value])
         setAliment("");
         setTxtPortion(0);
+        setGroupeAlimentaireImageAsync(group_alim_images[groupe_alimentaire_value])
         return;
       }
     }
@@ -93,6 +102,14 @@ export default function AlimentCard(
         setImgSrc(aliment_images[myAliment]);
         setImageLoaded(true);
       }
+    }
+
+    const resetAlimentCard = async () => {
+        await setAliment("");
+        await setTxtPortion(0);
+        await setImageLoaded(false);
+        await setImgSrc(logoImg);
+        await setImageLoaded(true);
     }
 
     return (
@@ -115,6 +132,17 @@ export default function AlimentCard(
             <Skeleton variant="rect" width={"100%"}  />
              
             }
+            
+            {aliment_options &&
+            <GroupeAlimentaireSelect 
+                groupe_alimentaires={aliment_options} 
+                selectedAliments={selectedAliments}
+                setSelectedAliments={setSelectedAliments}
+                setSelectedGroupAlimentaires={setSelectedGroupAlimentaires}
+                selectedGroupAlimentaires={selectedGroupAlimentaires}
+                setCurrentlySelectedGroupAlimentaire={setCurrentlySelectedGroupAlimentaire}
+                currentlySelectedGroupAlimentaire={groupe_alimentaire}
+            />}
             
             <CardContent>
                 <div style={{flexShrink: 1}}>
@@ -156,11 +184,12 @@ export default function AlimentCard(
                       setTxtPortion(e.target.value);
                     }
                   }}
+                  disabled={aliment === ""}
                 />
               
               
                 <Autocomplete
-                  disabled={groupe_alimentaire === "Aucun Aliment Sélectionné"}
+                  disabled={groupe_alimentaire === "Aucun Groupe Alimentaire Sélectionné"}
                   freeSolo
                   onChange={ (event, value) => handleAlimentChange(value) }
                   options={aliment_options[groupe_alimentaire.substring(0, (groupe_alimentaire.indexOf("_") === -1) ? groupe_alimentaire.length : groupe_alimentaire.indexOf("_")) ] || []}

@@ -12,7 +12,6 @@ export default function JsUploadSpreadsheet(
                                       {stateMutator, 
                                       spreadSheetCompoMutator, 
                                       setLoadingMutator, 
-                                      setFileName,
                                       setAlimentOptions}){
 
     useEffect(() => {
@@ -42,7 +41,7 @@ export default function JsUploadSpreadsheet(
             await stateMutator(true);
         };
 
-        setFileName(f.name);
+        
         await reader.readAsBinaryString(f);
 
     };
