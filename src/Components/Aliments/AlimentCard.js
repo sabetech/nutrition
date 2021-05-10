@@ -25,7 +25,7 @@ export default function AlimentCard(
     setCurrentlySelectedGroupAlimentaire
   }) {
 
-    const logoImg = "https://lh3.googleusercontent.com/d/1k-WtjRYpUXyRqjaTZfJlQUz3gTwEBUAx=s220?authuser=0";
+    const logoImg = "https://images.unsplash.com/photo-1478144592103-25e218a04891?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1268&q=80";
     const classes = useStyles();
     const [imageLoaded, setImageLoaded] = useState(true);
     const [imgsrc, setImgSrc] = useState(logoImg);
@@ -162,6 +162,16 @@ export default function AlimentCard(
                 }
                 </Typography>
             </CardContent>
+            <Autocomplete
+                  disabled={groupe_alimentaire === "Aucun Groupe Alimentaire Sélectionné"}
+                  freeSolo
+                  onChange={ (event, value) => handleAlimentChange(value) }
+                  options={aliment_options[groupe_alimentaire.substring(0, (groupe_alimentaire.indexOf("_") === -1) ? groupe_alimentaire.length : groupe_alimentaire.indexOf("_")) ] || []}
+                  getOptionLabel={(option) => option}
+                  renderInput={(params) => <TextField {...params} label="Choisir un Aliment pour le groupe alimentaire sélectionné" margin="normal" />}
+                  value={aliment}
+                />
+
             <CardContent>
                 <TextField
                   required
@@ -171,7 +181,8 @@ export default function AlimentCard(
                   type="number"
                   min={0}
                   id={aliment}
-                  label="PORTION"
+                  
+                  label="PORTION eg:1 portion = 100g, .5 portion = 50 g"
                   variant="filled"
                   value={txtPortion}
                   onChange={(e) => {
@@ -187,16 +198,6 @@ export default function AlimentCard(
                   disabled={aliment === ""}
                 />
               
-              
-                <Autocomplete
-                  disabled={groupe_alimentaire === "Aucun Groupe Alimentaire Sélectionné"}
-                  freeSolo
-                  onChange={ (event, value) => handleAlimentChange(value) }
-                  options={aliment_options[groupe_alimentaire.substring(0, (groupe_alimentaire.indexOf("_") === -1) ? groupe_alimentaire.length : groupe_alimentaire.indexOf("_")) ] || []}
-                  getOptionLabel={(option) => option}
-                  renderInput={(params) => <TextField {...params} label="Choisir un Aliment" margin="normal" />}
-                  value={aliment}
-                />
                 </CardContent>
               
         </Card>

@@ -15,7 +15,7 @@ export default function GroupeAlimentaireSelect({
     useEffect(() => {
 
         if (selectedGroupAlimentaires.length > 0) {
-            setCurrentlySelectedGroupAlimentaire(selectedGroupAlimentaires[0]);
+            setCurrentlySelectedGroupAlimentaire(selectedGroupAlimentaires[selectedGroupAlimentaires.length -1]);
             return;
         }
 
@@ -63,13 +63,15 @@ export default function GroupeAlimentaireSelect({
 
     return (
         <Menu attached='top' >
-            <Button.Group >
+            <Button.Group color='blue' inverted>
                 
                 <Dropdown
-                    text='Ajouter'
+                    text='Ajouter un Aliment'
+                    
                     icon='plus'
                     labeled
                     button
+                    style={{width:190}}
                     className='icon'
                     scrolling={true}
                     upward
@@ -100,14 +102,14 @@ export default function GroupeAlimentaireSelect({
                     }
                 />
                  
-                <Button.Or text={"and"} />
+                <Button.Or text={"et"} />
                 <Dropdown
-                    text='Choisir'
+                    text='Choisir un Aliment'
                     icon='triangle down'
                     labeled
                     button
                     className='icon'
-                    style={{width:190}}
+                    style={{width:170}}
                     upward
                     scrolling={true}
                     disabled={selectedGroupAlimentaires.length === 0}
@@ -136,7 +138,11 @@ export default function GroupeAlimentaireSelect({
 
             
             <Menu.Menu position='right'>
-                <Button disabled={currentlySelectedGroupAlimentaire==="Aucun Groupe Alimentaire Sélectionné"} onClick={handleAlimentaireDelete} icon basic color='red'>
+                <Button 
+                disabled={currentlySelectedGroupAlimentaire==="Aucun Groupe Alimentaire Sélectionné"} 
+                onClick={handleAlimentaireDelete} 
+                icon 
+                >
                     <Icon name='trash' />
                 </Button>
             </Menu.Menu>
