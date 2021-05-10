@@ -67,7 +67,6 @@ export default function GroupeAlimentaireSelect({
                 
                 <Dropdown
                     text='Ajouter un Aliment'
-                    
                     icon='plus'
                     labeled
                     button
