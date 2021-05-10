@@ -108,7 +108,7 @@ export default function GroupeAlimentaireSelect({
                     labeled
                     button
                     className='icon'
-                    //style={{width:170}}
+                    style={{width:150}}
                     upward
                     scrolling={true}
                     disabled={selectedGroupAlimentaires.length === 0}
