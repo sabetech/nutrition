@@ -23,7 +23,7 @@ const [loading, setLoading] = useState(false);
 const [aliment_options, setAlimentOptions] = useState([]);
 
 const [currentlySelectedGroupAlimentaire, setCurrentlySelectedGroupAlimentaire] = useState("Aucun Groupe Alimentaire Sélectionné");
-
+const textColor = "#00CAE8";
 const classes = useStyles();
 
   useEffect(() => {      
@@ -69,7 +69,7 @@ const classes = useStyles();
 
               <Card className={classes.summary_root} style={{zIndex:-1}}>
                 <CardContent>
-                <Typography gutterBottom variant="h5" component="h2" color={"primary"} >
+                <Typography gutterBottom variant="h5" component="h2" style={{color: textColor}} >
                   Apports nutritionnels du jour
                   </Typography>
 

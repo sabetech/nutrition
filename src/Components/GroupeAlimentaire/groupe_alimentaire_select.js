@@ -63,10 +63,10 @@ export default function GroupeAlimentaireSelect({
 
     return (
         <Menu attached='top' >
-            <Button.Group color='blue' inverted>
+            <Button.Group color="blue">
                 
                 <Dropdown
-                    text='Ajouter un Aliment'
+                    text='Ajouter un Groupe Alimentaire'
                     icon='plus'
                     labeled
                     button
@@ -103,7 +103,7 @@ export default function GroupeAlimentaireSelect({
                  
                 <Button.Or text={"et"} />
                 <Dropdown
-                    text='Choisir un Aliment'
+                    text='Choisir un Groupe Alimentaire'
                     icon='triangle down'
                     labeled
                     button
@@ -141,8 +141,9 @@ export default function GroupeAlimentaireSelect({
                 disabled={currentlySelectedGroupAlimentaire==="Aucun Groupe Alimentaire Sélectionné"} 
                 onClick={handleAlimentaireDelete} 
                 icon 
+                width={60}
                 >
-                    <Icon name='trash' />
+                    <Icon name='trash' size={'big'}/>
                 </Button>
             </Menu.Menu>
         </Menu>
