@@ -9,6 +9,7 @@ import JsUploadSpreadsheet from '../../Components/JS_Uploadspreadsheet';
 import AlimentCard from '../../Components/Aliments/AlimentCard';
 import SummariesAliment from '../../Components/Aliments/SummariesAliment';
 import "react-responsive-carousel/lib/styles/carousel.min.css";
+import Container from '@material-ui/core/Container';
 
 import aliment_images from '../../resources/aliment_images.json';
 
@@ -23,7 +24,7 @@ const [loading, setLoading] = useState(false);
 const [aliment_options, setAlimentOptions] = useState([]);
 
 const [currentlySelectedGroupAlimentaire, setCurrentlySelectedGroupAlimentaire] = useState("Aucun Groupe Alimentaire Sélectionné");
-const textColor = "#00CAE8";
+const textColor = "#00CAE8n";
 const classes = useStyles();
 
   useEffect(() => {      
@@ -33,6 +34,7 @@ const classes = useStyles();
 
   return (
     <div >
+      <Container maxWidth="sm">
         {
         !uploaded &&
         
@@ -85,9 +87,10 @@ const classes = useStyles();
             {/* <Box component="span" m={1}>
               
             </Box> */}
+            
           </div>
         }
-    
+      </Container>
     </div>
   );
   }
