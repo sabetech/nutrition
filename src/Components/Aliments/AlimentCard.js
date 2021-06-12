@@ -7,6 +7,7 @@ import {
     CardContent, 
     Typography,
     TextField,
+    InputLabel
   } from '@material-ui/core/';
   import Autocomplete from '@material-ui/lab/Autocomplete';
   import Skeleton from '@material-ui/lab/Skeleton';
@@ -164,12 +165,14 @@ export default function AlimentCard(
                 }
                 </Typography>
             </CardContent>
+
+            <InputLabel style={{marginTop: 20}}>Choisir un Aliment pour le groupe alimentaire sélectionné</InputLabel>
             <Autocomplete
                   disabled={groupe_alimentaire === "Aucun Groupe Alimentaire Sélectionné"}
                   onChange={ (event, value) => handleAlimentChange(value) }
                   options={aliment_options[groupe_alimentaire.substring(0, (groupe_alimentaire.indexOf("_") === -1) ? groupe_alimentaire.length : groupe_alimentaire.indexOf("_")) ] || []}
                   getOptionLabel={(option) => option}
-                  renderInput={(params) => <TextField {...params} label="Choisir un Aliment pour le groupe alimentaire sélectionné" margin="normal" />}
+                  renderInput={(params) => <TextField {...params} label="Liste des aliments"  />}
                   value={aliment}
                   style={{ padding: 20 }}
                   noOptionsText={"Aucun aliment dans ce groupe"}

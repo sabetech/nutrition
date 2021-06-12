@@ -71,7 +71,7 @@ const classes = useStyles();
 
               <Card className={classes.summary_root} style={{zIndex:-1}}>
                 <CardContent>
-                <Typography gutterBottom variant="h5" component="h2" style={{color: textColor}} >
+                <Typography gutterBottom variant="h5" component="h2" style={{color: textColor}} style={{paddingBottom: 20}} >
                   Apports nutritionnels du jour
                   </Typography>
 
