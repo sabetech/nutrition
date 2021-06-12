@@ -63,14 +63,14 @@ export default function GroupeAlimentaireSelect({
 
     return (
         <Menu attached='top' >
-            <Button.Group color="blue">
+            <Button.Group color="blue" style={{flex: 2, justifyContent: 'center', alignItems: 'center'}}>
                 
                 <Dropdown
                     text='Ajouter un Groupe Alimentaire'
                     icon='plus'
                     labeled
                     button
-                    style={{width:150}}
+                    style={{width:100}}
                     className='icon'
                     scrolling={true}
                     upward
@@ -136,14 +136,14 @@ export default function GroupeAlimentaireSelect({
             </Button.Group>
 
             
-            <Menu.Menu position='right'>
+            <Menu.Menu >
                 <Button 
                 disabled={currentlySelectedGroupAlimentaire==="Aucun Groupe Alimentaire Sélectionné"} 
                 onClick={handleAlimentaireDelete} 
                 icon 
-                width={60}
+                width={30}
                 >
-                    <Icon name='trash' size={'big'}/>
+                    <Icon name='trash' size={'large'}/>
                 </Button>
             </Menu.Menu>
         </Menu>

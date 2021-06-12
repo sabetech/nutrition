@@ -153,7 +153,6 @@ export default function AlimentCard(
                   {groupe_alimentaire &&
                   groupe_alimentaire.charAt(0).toUpperCase() 
                   + groupe_alimentaire.replaceAll("_"," ").slice(1) 
-                  + new String(Array(45 - groupe_alimentaire.length).fill("\xa0").join(" ")).toString()  
                   }
                 </Typography>
                 </div>
@@ -181,14 +180,12 @@ export default function AlimentCard(
             <CardContent>
                 <TextField
                   required
-                  InputLabelProps={{
-                    shrink: true,
-                  }}
+                  
                   type="number"
                   min={0}
                   id={aliment}
-                  
-                  label="PORTION eg:1 portion = 100g, .5 portion = 50 g"
+                  style={{width: 250}}
+                  label="Portion* (1 portion = 100g, 0.5 portion = 50 g, 0.25 portion = 25 g)"
                   variant="filled"
                   value={txtPortion}
                   onChange={(e) => {
