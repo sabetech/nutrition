@@ -70,7 +70,7 @@ export default function GroupeAlimentaireSelect({
                     icon='plus'
                     labeled
                     button
-                    style={{width:100}}
+                    style={{width:125}}
                     className='icon'
                     scrolling={true}
                     upward
@@ -108,7 +108,7 @@ export default function GroupeAlimentaireSelect({
                     labeled
                     button
                     className='icon'
-                    style={{width:150}}
+                    style={{width:125}}
                     upward
                     scrolling={true}
                     disabled={selectedGroupAlimentaires.length === 0}
@@ -141,9 +141,9 @@ export default function GroupeAlimentaireSelect({
                 disabled={currentlySelectedGroupAlimentaire==="Aucun Groupe Alimentaire Sélectionné"} 
                 onClick={handleAlimentaireDelete} 
                 icon 
-                width={30}
+                floated='left'
                 >
-                    <Icon name='trash' size={'large'}/>
+                    <Icon name='trash' size={'large'} />
                 </Button>
             </Menu.Menu>
         </Menu>
