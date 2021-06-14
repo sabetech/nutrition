@@ -11,7 +11,7 @@ import SummariesAliment from '../../Components/Aliments/SummariesAliment';
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import Container from '@material-ui/core/Container';
 
-import aliment_images from '../../resources/aliment_images.json';
+import aliment_images from '../../resources/aliment_images2.json';
 
 
 
