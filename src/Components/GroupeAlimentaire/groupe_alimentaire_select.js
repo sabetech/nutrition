@@ -70,7 +70,7 @@ export default function GroupeAlimentaireSelect({
                     icon='plus'
                     labeled
                     button
-                    style={{width:100}}
+                    style={{width:120}}
                     className='icon'
                     scrolling={true}
                     upward
